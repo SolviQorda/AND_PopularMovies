@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <ListPreference
+        android:key="@string/pref_search_category_key"
+        android:defaultValue="@string/pref_search_category_popularity"
+        android:title="@string/pref_search_category_title"
+        android:entries="@array/pref_search_category_options"
+        android:entryValues="@array/pref_search_category_values"
+
+            />
+</PreferenceScreen>
