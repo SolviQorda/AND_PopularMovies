@@ -27,7 +27,7 @@ public class ReviewAdapter  extends ArrayAdapter<MovieReview>{
         MovieReview review = getItem(position);
         ViewHolder holder;
 
-        if(convertView != null) {
+        if(convertView == null) {
             convertView = LayoutInflater.from(getContext()).inflate(R.layout.review_list_item_detail, parent, false);
 
             holder = new ViewHolder();

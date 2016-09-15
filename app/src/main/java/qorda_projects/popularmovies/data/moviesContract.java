@@ -37,7 +37,7 @@ public class moviesContract {
         public static final String COLUMN_FAVOURITE = "favourite";
 
         // data returned from a videos request
-        public static final String COLUMN_VIDEO_KEYS ="videos";
+        public static final String COLUMN_VIDEOS ="videos";
         //data returned from a reviews request
         public static final String COLUMN_REVIEWS = "reviews";
 

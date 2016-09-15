@@ -41,6 +41,7 @@ import qorda_projects.popularmovies.data.moviesContract;
 public class PosterListFragment extends Fragment {
 
 
+    private static final String PLACEHOLDER = "PLACEHOLDER: TO REPLACE WITH DATA";
     private static final String LOG_TAG = PosterListFragment.class.getSimpleName();
     public static ImageAdapter mMoviesAdapter;
     public GridView posterGridView;
@@ -168,12 +169,14 @@ public class PosterListFragment extends Fragment {
 
                         resultsStrArray[i] = MovieElement;
             }
-            Log.v(LOG_TAG, "results array : "+ resultsStrArray.toString());
+//            Log.v(LOG_TAG, "results array : "+ resultsStrArray.toString());
 
             // TODO: insert this data into db --  remember don't want to store image
+            // Don't actually need the vector unless doing a bulk insert.
             Vector<ContentValues> cVVector = new Vector<ContentValues>(resultsStrArray.length);
 
             for(int i = 0;i<resultsStrArray.length;i++){
+                String posterPath = resultsStrArray[i].getPosterUrl();
                 String synopsis = resultsStrArray[i].getSynopsis();
                 String title = resultsStrArray[i].getTitle();
                 String userRating = resultsStrArray[i].getUserRating();
@@ -183,17 +186,23 @@ public class PosterListFragment extends Fragment {
 
                 ContentValues movieValues = new ContentValues();
 
+                movieValues.put(moviesContract.MoviesEntry.COLUMN_POSTER_PATH, posterPath);
                 movieValues.put(moviesContract.MoviesEntry.COLUMN_OVERVIEW, synopsis);
                 movieValues.put(moviesContract.MoviesEntry.COLUMN_TITLE, title);
                 movieValues.put(moviesContract.MoviesEntry.COLUMN_VOTE_AVERAGE, userRating);
                 movieValues.put(moviesContract.MoviesEntry.COLUMN_RELEASE_DATE, releaseDate);
                 movieValues.put(moviesContract.MoviesEntry.COLUMN_DB_ID, mdbId);
+                movieValues.put(moviesContract.MoviesEntry.COLUMN_FAVOURITE, 0);
+                movieValues.put(moviesContract.MoviesEntry.COLUMN_VIDEOS, PLACEHOLDER);
+                movieValues.put(moviesContract.MoviesEntry.COLUMN_REVIEWS, PLACEHOLDER);
 
+                getContext().getContentResolver().insert(moviesContract.MoviesEntry.CONTENT_URI, movieValues);
                 cVVector.add(movieValues);
 
-            }
 
-            //Could add a bulkInsert here, would have to code the method
+            }
+            Log.d(LOG_TAG, "insert:" + cVVector.size() + " inserted");
+            //
 
 
             return resultsStrArray;
@@ -223,7 +232,7 @@ public class PosterListFragment extends Fragment {
 
                 URL url = new URL(builtUri.toString());
 
-                Log.v(LOG_TAG, "Built URI: " + builtUri.toString());
+//                Log.v(LOG_TAG, "Built URI: " + builtUri.toString());
 
                 urlConnection = (HttpURLConnection) url.openConnection();
                 urlConnection.setRequestMethod("GET");
@@ -244,7 +253,7 @@ public class PosterListFragment extends Fragment {
                     return null;
                 }
                 movieJsonStr = buffer.toString();
-                Log.v(LOG_TAG, "JSON string: "+ movieJsonStr);
+//                Log.v(LOG_TAG, "JSON string: "+ movieJsonStr);
 
             } catch(IOException e)
             {
@@ -281,14 +290,14 @@ public class PosterListFragment extends Fragment {
         protected void onPostExecute(MovieElement[] result) {
             super.onPostExecute(result);
             mMovies = new ArrayList<MovieElement>();
-            Log.v(LOG_TAG, "Movie array: " + result.toString());
+//            Log.v(LOG_TAG, "Movie array: " + result.toString());
             if(result != null){
                 mMovies.clear();
                 //loop to pass result into an arrayList of MovieElements
                 for(int i = 0; i < result.length;i++)
                 {
                     mMovies.add(result[i]);
-                    Log.v(LOG_TAG, "Movie: " + result[i].toString());
+//                    Log.v(LOG_TAG, "Movie: " + result[i].toString());
 
                 }
             }
@@ -305,7 +314,7 @@ public class PosterListFragment extends Fragment {
                 //trying to get movie_element object through the adapter.
                 MovieElement movie =  mMovies.get(position);
 
-                Log.v(LOG_TAG, "mMovieData: " + movie.toString());
+//                Log.v(LOG_TAG, "mMovieData: " + movie.toString());
                 Intent detailIntent = new Intent(getActivity(), DetailActivity.class).
                         putExtra("Movie", movie);
                 PosterListFragment.this.startActivity(detailIntent);

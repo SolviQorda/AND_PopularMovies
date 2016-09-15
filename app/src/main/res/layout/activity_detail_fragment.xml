@@ -52,6 +52,14 @@
         android:textSize="@dimen/content_size"
         android:textStyle="italic"/>
 
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/detail_favourites"
+            android:textColor="@color/colorTitle"
+            android:background="@color/colorAccent"
+            />
+
     </LinearLayout>
     <TextView
         android:id="@+id/detail_synopsis"
@@ -62,19 +70,34 @@
         android:textSize="@dimen/content_size"
         />
 
+
     <!-- listView for trailers-->
-    <ListView
-        android:id="@+id/listView_trailers"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+<!--<LinearLayout android:layout_width="match_parent"-->
+              <!--android:layout_height="match_parent"-->
+              <!--android:layout_below="@+id/detail_synopsis"-->
+              <!--android:orientation="vertical">-->
+<ListView
+    android:id="@+id/listView_trailers"
+    android:layout_width="match_parent"
+    android:layout_height="200dp"
+    android:layout_below="@+id/detail_synopsis"
 
-    </ListView>
+    >
 
-    <!-- listView for reviews-->
-    <ListView
-        android:id="@+id/listView_reviews"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+</ListView>
 
-    </ListView>
+ <!--listView for reviews-->
+<ListView
+
+    android:id="@+id/listView_reviews"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_below="@+id/listView_trailers"
+    android:layout_marginBottom="20dp"
+
+>
+</ListView>
+
+
+
 </RelativeLayout>

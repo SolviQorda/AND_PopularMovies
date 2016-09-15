@@ -5,16 +5,18 @@
               android:layout_height="match_parent"
               android:layout_margin="4dp"
               android:paddingLeft="16dp"
-              android:paddingRight="16dp">
+              android:paddingRight="16dp"
+                android:paddingBottom="4dp">
 
     <TextView
         android:id="@+id/review_list_author"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"/>
+        android:layout_height="match_parent"
+        android:textColor="@color/colorPrimaryDark"/>
 
     <TextView
         android:id="@+id/review_list_content"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"/>
+        android:layout_height="match_parent"/>
 
 </LinearLayout>

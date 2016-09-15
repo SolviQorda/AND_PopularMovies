@@ -16,13 +16,19 @@
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
 
-                <category android:name="android.intent.category.LAUNCHER"/>
+                <category android:name="android.intent.category.LAUNCHER"
+                          android:parentActivityName=".MainActivity"/>
             </intent-filter>
         </activity>
         <activity android:name=".DetailActivity">
         </activity>
         <activity android:name=".SettingsActivity">
         </activity>
+
+        <provider android:authorities="@string/content_authority"
+                  android:name=".data.moviesProvider"
+                  android:syncable="true"
+                  android:exported="false"/>
     </application>
 
 </manifest>

@@ -19,16 +19,19 @@ public class MovieDbHelper extends SQLiteOpenHelper{
 
     @Override
     public void onCreate(SQLiteDatabase sqLiteDatabase){
-        final String SQL_CREATE_MOVIES_TABLE = "CREATE TABLE" + MovieDbHelper.DATABASE_NAME + " (" +
-                moviesContract.MoviesEntry._ID + " INTEGER PRIMARY KEY" +
-                moviesContract.MoviesEntry.COLUMN_POSTER_PATH + " TEXT NOT NULL" +
-                moviesContract.MoviesEntry.COLUMN_OVERVIEW + " TEXT NOT NULL" +
-                moviesContract.MoviesEntry.COLUMN_RELEASE_DATE + " TEXT NOT NULL" +
-                moviesContract.MoviesEntry.COLUMN_TITLE + " TEXT NOT NULL" +
-                moviesContract.MoviesEntry.COLUMN_VOTE_AVERAGE + " TEXT NOT NULL" +
-                moviesContract.MoviesEntry.COLUMN_DB_ID + " TEXT NOT NULL" +
-                moviesContract.MoviesEntry.COLUMN_FAVOURITE + " INTEGER NOT NULL" +
 
+
+        final String SQL_CREATE_MOVIES_TABLE = "CREATE TABLE " + moviesContract.MoviesEntry.TABLE_NAME + " (" +
+                moviesContract.MoviesEntry._ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
+                moviesContract.MoviesEntry.COLUMN_POSTER_PATH + " TEXT NOT NULL, " +
+                moviesContract.MoviesEntry.COLUMN_OVERVIEW + " TEXT NOT NULL, " +
+                moviesContract.MoviesEntry.COLUMN_RELEASE_DATE + " TEXT NOT NULL, " +
+                moviesContract.MoviesEntry.COLUMN_TITLE + " TEXT NOT NULL, " +
+                moviesContract.MoviesEntry.COLUMN_VOTE_AVERAGE + " TEXT NOT NULL, " +
+                moviesContract.MoviesEntry.COLUMN_DB_ID + " TEXT NOT NULL, " +
+                moviesContract.MoviesEntry.COLUMN_FAVOURITE + " INTEGER, " +
+                moviesContract.MoviesEntry.COLUMN_VIDEOS + " TEXT, " +
+                moviesContract.MoviesEntry.COLUMN_REVIEWS + " TEXT" +
                 ");";
 
         sqLiteDatabase.execSQL(SQL_CREATE_MOVIES_TABLE);
@@ -40,5 +43,6 @@ public class MovieDbHelper extends SQLiteOpenHelper{
         //TODO: add commands to upgrade
         sqLiteDatabase.execSQL("CLOSE TABLE IF EXISTS" + moviesContract.MoviesEntry.TABLE_NAME);
         onCreate(sqLiteDatabase);
+
     }
 }

@@ -5,6 +5,7 @@
     <!--settings strings-->
     <string name="action_settings" translatable="true">Settings</string>
     <string name="action_refresh" translatable="true">Refresh</string>
+    <string name="content_authority" translatable="false">qorda_projects.projects.popularmovies</string>
 
     <string name="pref_search_category_key" translatable="false">searchCategory</string>
     <string name="pref_search_category_popularity" translatable="true">popularity</string>
@@ -14,5 +15,6 @@
     <string name="pref_search_category_title" translatable="true">Search By</string>
 
     <string name="trailer_watch" translatable="true">Watch Trailer</string>
+    <string name="add_favourites">Add To Favourites</string>
 
 </resources>

@@ -1,6 +1,9 @@
 package qorda_projects.popularmovies;
 
 import android.content.Context;
+import android.content.Intent;
+import android.net.Uri;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,13 +16,16 @@ import java.util.ArrayList;
 /**
  * Created by sorengoard on 12/09/16.
  */
-public class TrailerAdapter extends ArrayAdapter<MovieTrailer>{
+public class TrailerAdapter extends ArrayAdapter<MovieTrailer> {
 
     final String LOG_TAG = TrailerAdapter.class.getSimpleName();
+    final String YOUTUBE_BASE = "https://www.youtube.com/watch?v=";
+
 
     public TrailerAdapter(Context context, ArrayList<MovieTrailer> movieTrailers) {
         super(context, 0, movieTrailers);
     }
+
     static class ViewHolder {
         public TextView trailerName;
         public Button trailerWatch;
@@ -39,12 +45,27 @@ public class TrailerAdapter extends ArrayAdapter<MovieTrailer>{
 
             convertView.setTag(holder);
 
-            if(trailer!=null) {
-                if(holder.trailerName!= null) {
+            if (trailer != null) {
+                if (holder.trailerName != null) {
                     holder.trailerName.setText(trailer.getTrailerName());
                 }
-                if(holder.trailerWatch!= null) {
-                    holder.trailerWatch.setContentDescription(trailer.getTrailerKey());
+                if (holder.trailerWatch != null) {
+                    final String key = trailer.getTrailerKey();
+                    holder.trailerWatch.setOnClickListener(new View.OnClickListener() {
+
+                        @Override
+                        public void onClick(View v) {
+                            {
+                                String url = YOUTUBE_BASE + key;
+                                Log.v(LOG_TAG, "YT url:" + url);
+                                Intent watchIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(url));
+                                getContext().startActivity(watchIntent);
+                            }
+
+
+                        }
+                    });
+
                 }
             }
         }

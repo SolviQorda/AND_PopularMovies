@@ -7,11 +7,14 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteQueryBuilder;
 import android.net.Uri;
+import android.util.Log;
 
 /**
  * Created by sorengoard on 12/09/16.
  */
 public class moviesProvider extends ContentProvider{
+
+    private static final String LOG_TAG = moviesProvider.class.getSimpleName();
 
     //uri matcher
     private static final UriMatcher mUriMatcher = buildUriMatcher();
@@ -79,6 +82,7 @@ public class moviesProvider extends ContentProvider{
         Uri returnUri;
 
         long _id = db.insert(moviesContract.MoviesEntry.TABLE_NAME, null, contentValues);
+        Log.d(LOG_TAG, "_id: " + Long.toString(_id));
         if (_id > 0) {
             returnUri = moviesContract.MoviesEntry.buildMoviesUri(_id);
         } else {
@@ -118,4 +122,34 @@ public class moviesProvider extends ContentProvider{
 
         return rowsDeleted;
     }
+
+    @Override
+    public int bulkInsert(Uri uri, ContentValues[] values) {
+        final SQLiteDatabase db = mDbHelper.getWritableDatabase();
+        //for use if more cases
+        final int match = mUriMatcher.match(uri);
+
+        db.beginTransaction();
+        int returnCount = 0;
+        try {
+            for (ContentValues value : values) {
+
+                long _id = db.insert(moviesContract.MoviesEntry.TABLE_NAME, null, value);
+                if (_id != -1) {
+                    returnCount++;
+                }
+            }
+            db.setTransactionSuccessful();
+        } finally {
+            db.endTransaction();
+        }
+        getContext().getContentResolver().notifyChange(uri, null);
+        return returnCount;
+
+        //return super.bulkInsert(uri, values);
+
+    }
+
+
+
 }

@@ -1,7 +1,6 @@
 package qorda_projects.popularmovies;
 
 import android.content.Context;
-import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
@@ -73,7 +72,7 @@ public class ImageAdapter extends BaseAdapter {
                 Picasso.with(mContext).
                         load(URLroot + imageUrl).
                         into(imageView);
-        Log.v(LOG_TAG, "homepage Image Url that works:" + URLroot + imageUrl);
+//        Log.v(LOG_TAG, "homepage Image Url that works:" + URLroot + imageUrl);
 
                 String title = (movie.getTitle());
                 String userRating = movie.getUserRating();
