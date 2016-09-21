@@ -95,8 +95,8 @@ public class DetailFragment extends Fragment implements LoaderManager.LoaderCall
         Bundle arguments = getArguments();
         if (arguments != null) {
 
-            mUri = arguments.getParcelable(DETAIL_URI);
-            Log.v(LOG_TAG,"is mUri null?" + mUri);
+//            mUri = arguments.getParcelable(DETAIL_URI);
+//            Log.v(LOG_TAG,"is mUri null?" + mUri);
         }
 
         View rootView = inflater.inflate(R.layout.activity_detail_fragment, container, false);
@@ -110,13 +110,42 @@ public class DetailFragment extends Fragment implements LoaderManager.LoaderCall
         mReleaseView = (TextView) rootView.findViewById(R.id.detail_releaseDate);
         mFavouriteButton = (Button) rootView.findViewById(R.id.detail_favourites);
 
-        //TODO: Can replace this with a comlete database call.
+        //TODO: Call database with mUri to construct a movie object.
+
         Intent intent = getActivity().getIntent();
         if (intent != null) {
-            MovieElement movie = intent.getParcelableExtra("Movie");
-            mdbId = movie.getMovieId();
+            Bundle args = intent.getExtras();
+            mUri = args.getParcelable("dbIdUri");
+            Log.v(LOG_TAG, "mUri in DF" + mUri);
+
+            String idStr = mUri.toString();
+            mdbId = idStr.substring(55);
+            Log.v(LOG_TAG, "mdbId slice" + mdbId);
+
+//            //cursor to access the
+//            Cursor retMovie = getContext().getContentResolver().query(mUri, DETAIL_COLUMNS, null, null, null);
+//            retMovie.moveToFirst();
+
+//            String synopsis = retMovie.getString(1);
+//            String title = retMovie.getString(2);
+//            String userRating = retMovie.getString(3);
+//            String releaseDate = retMovie.getString(4);
+//              mdbId = retMovie.getString(5);
+//            int favourite = retMovie.getInt(6);
+//            String posterPath = retMovie.getString(7);
+//            Log.v(LOG_TAG, "posterpathfromcurso:" + posterPath);
+//
+ MovieElement movie = new MovieElement();
+//            movie.setSynopsis(synopsis);
+//            movie.setTitle(title);
+//            movie.setUserRating(userRating);
+//            movie.setReleaseDate(releaseDate);
+             movie.setMovieId(mdbId);
+//            movie.setPosterUrl(posterPath);
+
 
             //TODO:Make this an independent method and place in an exception
+
 
             fetchTrailersAndReviews fetchTrailersAndReviewsTask = new fetchTrailersAndReviews();
             fetchTrailersAndReviewsTask.execute(movie);
@@ -136,7 +165,7 @@ public class DetailFragment extends Fragment implements LoaderManager.LoaderCall
 
         if(null != mUri) {
 
-            return new CursorLoader(getContext(),
+            return new CursorLoader(getActivity(),
                     mUri,
                     DETAIL_COLUMNS,
                     null,
@@ -191,8 +220,6 @@ public class DetailFragment extends Fragment implements LoaderManager.LoaderCall
     @Override
     public void onLoaderReset(Loader<Cursor> cursorloader) { }
 
-
-
     //New async task here for movies and reviews - needs to take id from resultsStrArray
 
     public class fetchTrailersAndReviews extends AsyncTask<MovieElement, Void, MovieElement> {
@@ -213,7 +240,6 @@ public class DetailFragment extends Fragment implements LoaderManager.LoaderCall
             JSONArray reviewResultsArray = reviewListJson.getJSONArray(MDB_RESULTS);
             int length = reviewResultsArray.length();
             MovieReview[] movieReviewsResults = new MovieReview[length];
-            Log.v(LOG_TAG, "lengthMR[]:" + Integer.toString(length));
             //for loop to collect each review.
             for (int i = 0;i < reviewResultsArray.length(); i++) {
                 JSONObject reviewJson = reviewResultsArray.getJSONObject(i);
@@ -283,13 +309,9 @@ public class DetailFragment extends Fragment implements LoaderManager.LoaderCall
             final String MDB_API_PARAM = "api_key";
 
             //TODO: Insert an API key here
-            String MDBapiKey = "a4715beb8058bc4e54fae129a771d6ff";
+            String MDBapiKey = "";
 
             //we only need the id
-
-            for (int i = 0; i < PosterListFragment.mMovies.size(); i++) {
-
-
                 Log.v(LOG_TAG, "movie id: " + mdbId);
 
                 try {
@@ -404,7 +426,7 @@ public class DetailFragment extends Fragment implements LoaderManager.LoaderCall
                         }
                     }
                 }
-            }
+
             Log.v(LOG_TAG, "t&v:" + trailersAndReviews.toString());
             return null;
         }

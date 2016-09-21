@@ -51,6 +51,10 @@ public class PosterListFragment extends Fragment {
         // Required empty public constructor
     }
 
+    public interface Callback {
+        public void onItemSelected(Uri dateUri);
+    }
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -171,7 +175,7 @@ public class PosterListFragment extends Fragment {
             }
 //            Log.v(LOG_TAG, "results array : "+ resultsStrArray.toString());
 
-            // TODO: insert this data into db --  remember don't want to store image
+            // TODO: insert this data into db -- how could we get the SQL id out?
             // Don't actually need the vector unless doing a bulk insert.
             Vector<ContentValues> cVVector = new Vector<ContentValues>(resultsStrArray.length);
 
@@ -219,7 +223,7 @@ public class PosterListFragment extends Fragment {
 
             String movieJsonStr = null;
             //TODO: Insert an API key here
-            String MDBapiKey = "a4715beb8058bc4e54fae129a771d6ff";
+            String MDBapiKey = "";
 
             try {
                 final String MOVIES_BASE_URL = "http://api.themoviedb.org/3/discover/movie?";
@@ -307,16 +311,30 @@ public class PosterListFragment extends Fragment {
 
             posterGridView.setAdapter(mMoviesAdapter);
 
+            //TODO: This now needs to pass a Uri bundle through an intent.
+
             posterGridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int position, long l)
             {
                 //trying to get movie_element object through the adapter.
                 MovieElement movie =  mMovies.get(position);
+                String mbd_id = movie.getMovieId();
 
-//                Log.v(LOG_TAG, "mMovieData: " + movie.toString());
+                //TODO: pass the mbd_id to build a uri based on db id.
+                //TODO: the only way of id'ing the movie is through its position and its details inside the
+                //TODO: movie object. So the URI builder needs to find the id and return the corresponding row
+                //TODO: If not ID, then how do we access the _ID of the row and bundle that?
+
+                //build a query that effectively gets * for a row where column_db_id == mbdid
+
+                Bundle movieArgs = new Bundle();
+                        Uri dbIdUri = moviesContract.MoviesEntry.buildMovieWithDbId(
+                                mbd_id);
+                movieArgs.putParcelable("dbIdUri", dbIdUri);
+                Log.v(LOG_TAG, "mdb_id uri: " + dbIdUri.toString());
                 Intent detailIntent = new Intent(getActivity(), DetailActivity.class).
-                        putExtra("Movie", movie);
+                        putExtras(movieArgs);
                 PosterListFragment.this.startActivity(detailIntent);
             }
 

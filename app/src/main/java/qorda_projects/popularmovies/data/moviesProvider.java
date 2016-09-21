@@ -22,11 +22,28 @@ public class moviesProvider extends ContentProvider{
 
     //Integer constants for URI types --> how do we know what these need to be?
     static final int MOVIES = 100;
+    static final int MOVIE_SINGLE = 101;
 
-    private static final SQLiteQueryBuilder sMoviesQuery;
+    private static final SQLiteQueryBuilder sMoviesByIdQueryBuilder;
 
     static{
-        sMoviesQuery = new SQLiteQueryBuilder();
+        sMoviesByIdQueryBuilder = new SQLiteQueryBuilder();
+    }
+    private static String sMovieByIdSetting =
+            moviesContract.MoviesEntry.TABLE_NAME + "." +
+                    moviesContract.MoviesEntry.COLUMN_DB_ID + " = ? ";
+
+    private Cursor getMovieById(Uri uri, String[] projection, String sortOrder) {
+        String idSetting = moviesContract.MoviesEntry.getDbIdFrmUri(uri);
+
+        return sMoviesByIdQueryBuilder.query(mDbHelper.getWritableDatabase(),
+                projection,
+                sMovieByIdSetting,
+                new String[]{idSetting},
+                null,
+                null,
+                sortOrder
+        );
     }
 
     static UriMatcher buildUriMatcher(){
@@ -35,6 +52,8 @@ public class moviesProvider extends ContentProvider{
         final String authority = moviesContract.CONTENT_AUTHORITY;
 
         matcher.addURI(authority, moviesContract.PATH_MOVIES, MOVIES);
+        //putting a * because the MDB_ID is a string in the sql db
+        matcher.addURI(authority, moviesContract.PATH_MOVIES + "/#", MOVIE_SINGLE);
 
         return matcher;
     }
@@ -50,23 +69,44 @@ public class moviesProvider extends ContentProvider{
         final int match = mUriMatcher.match(uri);
 
         //If different case, control flow them here.
+        switch (match) {
+            case(MOVIES):
+            return moviesContract.MoviesEntry.CONTENT_TYPE;
+            case(MOVIE_SINGLE):
+            return moviesContract.MoviesEntry.CONTENT_ITEM_TYPE;
+            default:
+                throw new UnsupportedOperationException("Unknown uri: " + uri);
+        }
 
-        return moviesContract.MoviesEntry.CONTENT_TYPE;
     }
 
     @Override
     public Cursor query(Uri uri, String[] projection, String selection, String[] selectionArgs, String sortOrder) {
 
+
         //For now default but if different cases add control flow.
-        Cursor retCursor = mDbHelper.getReadableDatabase().query(
-                moviesContract.MoviesEntry.TABLE_NAME,
-                projection,
-                selection,
-                selectionArgs,
-                null,
-                null,
-                sortOrder
-        );
+        Cursor retCursor;
+        switch(mUriMatcher.match(uri)) {
+            case(MOVIES):
+            retCursor = mDbHelper.getReadableDatabase().query(
+                    moviesContract.MoviesEntry.TABLE_NAME,
+                    projection,
+                    selection,
+                    selectionArgs,
+                    null,
+                    null,
+                    sortOrder
+            );
+                break;
+            case(MOVIE_SINGLE):
+                //getMovieByid
+                retCursor = getMovieById(uri, projection, sortOrder);
+                break;
+
+            default:
+                throw new UnsupportedOperationException("Unknown uri: " + uri);
+
+        }
 
         retCursor.setNotificationUri(getContext().getContentResolver(), uri);
         return retCursor;

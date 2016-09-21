@@ -41,9 +41,21 @@ public class moviesContract {
         //data returned from a reviews request
         public static final String COLUMN_REVIEWS = "reviews";
 
+        //
         public static Uri buildMoviesUri(long id) {
             return ContentUris.withAppendedId(CONTENT_URI, id);
         }
-    }
 
+       public static String getDbIdFrmUri(Uri uri){
+           return uri.getPathSegments().get(6);
+       }
+
+        //what would be the sql uri needed to access the column 'id'?
+
+        public static Uri buildMovieWithDbId(String dbId) {
+            return CONTENT_URI.buildUpon().appendPath(dbId).build();
+
+        }
+
+    }
 }
