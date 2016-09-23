@@ -1,9 +1,11 @@
 package qorda_projects.popularmovies;
 
+import android.annotation.TargetApi;
 import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.database.Cursor;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.net.Uri;
@@ -20,6 +22,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.GridView;
+import android.widget.ListView;
 import android.widget.Toast;
 
 import org.json.JSONArray;
@@ -38,14 +41,36 @@ import java.util.Vector;
 import qorda_projects.popularmovies.data.moviesContract;
 
 
-public class PosterListFragment extends Fragment {
-
+public class PosterListFragment extends Fragment{
 
     private static final String PLACEHOLDER = "PLACEHOLDER: TO REPLACE WITH DATA";
     private static final String LOG_TAG = PosterListFragment.class.getSimpleName();
+    private static final String SELECTED_KEY = "selected_position";
     public static ImageAdapter mMoviesAdapter;
+    private int mPosition = ListView.INVALID_POSITION;
     public GridView posterGridView;
     public static ArrayList<MovieElement> mMovies;
+
+    private static final String[] MOVIE_COLUMNS = {
+            moviesContract.MoviesEntry.TABLE_NAME + "." + moviesContract.MoviesEntry._ID,
+            moviesContract.MoviesEntry.COLUMN_OVERVIEW,
+            moviesContract.MoviesEntry.COLUMN_TITLE,
+            moviesContract.MoviesEntry.COLUMN_VOTE_AVERAGE,
+            moviesContract.MoviesEntry.COLUMN_RELEASE_DATE,
+            moviesContract.MoviesEntry.COLUMN_DB_ID,
+            moviesContract.MoviesEntry.COLUMN_FAVOURITE,
+            moviesContract.MoviesEntry.COLUMN_POSTER_PATH
+
+    };
+    private static int COL_MOVIE_TABLE_ID = 0;
+    private static int COL_MOVIE_OVERVIEW = 1;
+    private static int COL_MOVIE_TITLE = 2;
+    private static int COL_MOVIE_VOTE = 3;
+    private static int COL_MOVIE_RELEASE = 4;
+    private static int COL_MOVIE_DB_ID = 5;
+    private static int COL_MOVIE_FAVOURITE = 6;
+    private static int COL_MOVIE_POSTER_PATH = 7;
+
 
     public PosterListFragment() {
         // Required empty public constructor
@@ -67,6 +92,10 @@ public class PosterListFragment extends Fragment {
 
         final View rootView = inflater.inflate(R.layout.fragment_poster_list, container, false);
         posterGridView = (GridView) rootView.findViewById(R.id.gridview_posters);
+
+        if (savedInstanceState != null && savedInstanceState.containsKey(SELECTED_KEY)){
+            mPosition = savedInstanceState.getInt(SELECTED_KEY);
+        }
         if(isOnline()) {
 
             updateMovies();
@@ -74,9 +103,11 @@ public class PosterListFragment extends Fragment {
         }
         else
         {
+            //TODO: get data from db
             Toast.makeText(getContext(), getString(R.string.no_network_error), Toast.LENGTH_LONG).show();
             return rootView;
         }
+
     }
 
     public void onStart()
@@ -119,9 +150,14 @@ public class PosterListFragment extends Fragment {
     private void updateMovies() {
         fetchMoviesTask moviesTask = new fetchMoviesTask();
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getActivity());
-        //TODO: surely this needs to change, hardcoded to popularity
         String sortBy = prefs.getString(getString(R.string.pref_search_category_key), (getString(R.string.pref_search_category_popularity)));
-        moviesTask.execute(sortBy);
+
+        Log.v(LOG_TAG, "SortBy: "+ sortBy);
+        if(sortBy.equals("favourites")){
+            favouritesTask();
+        } else {
+            moviesTask.execute(sortBy);
+        }
      }
 
     public boolean isOnline()
@@ -134,6 +170,7 @@ public class PosterListFragment extends Fragment {
     public class fetchMoviesTask extends AsyncTask<String, Void, MovieElement[]> {
 
         //TODO: does it make sense to not use a movieelement object when we have a database?
+        //NEED SOME KIND OF CHECK THAT THERE ISN'T A DATABASE
 
         private MovieElement[] getMovieDataFromJson(String movieJsonStr)
                 throws JSONException {
@@ -152,7 +189,6 @@ public class PosterListFragment extends Fragment {
 
             for(int i = 0; i < JSONresultsArray.length();i++)
             {
-
                 //get each object from the JSONarray and assign it as a variable
                 JSONObject movie = JSONresultsArray.getJSONObject(i);
 
@@ -173,7 +209,6 @@ public class PosterListFragment extends Fragment {
 
                         resultsStrArray[i] = MovieElement;
             }
-//            Log.v(LOG_TAG, "results array : "+ resultsStrArray.toString());
 
             // TODO: insert this data into db -- how could we get the SQL id out?
             // Don't actually need the vector unless doing a bulk insert.
@@ -185,7 +220,6 @@ public class PosterListFragment extends Fragment {
                 String title = resultsStrArray[i].getTitle();
                 String userRating = resultsStrArray[i].getUserRating();
                 String releaseDate = resultsStrArray[i].getReleaseDate();
-                // mdb_id to differentiate from db table id.
                 String mdbId = resultsStrArray[i].getMovieId();
 
                 ContentValues movieValues = new ContentValues();
@@ -196,18 +230,14 @@ public class PosterListFragment extends Fragment {
                 movieValues.put(moviesContract.MoviesEntry.COLUMN_VOTE_AVERAGE, userRating);
                 movieValues.put(moviesContract.MoviesEntry.COLUMN_RELEASE_DATE, releaseDate);
                 movieValues.put(moviesContract.MoviesEntry.COLUMN_DB_ID, mdbId);
-                movieValues.put(moviesContract.MoviesEntry.COLUMN_FAVOURITE, 0);
+                movieValues.put(moviesContract.MoviesEntry.COLUMN_FAVOURITE, 1);
                 movieValues.put(moviesContract.MoviesEntry.COLUMN_VIDEOS, PLACEHOLDER);
                 movieValues.put(moviesContract.MoviesEntry.COLUMN_REVIEWS, PLACEHOLDER);
 
                 getContext().getContentResolver().insert(moviesContract.MoviesEntry.CONTENT_URI, movieValues);
                 cVVector.add(movieValues);
 
-
             }
-            Log.d(LOG_TAG, "insert:" + cVVector.size() + " inserted");
-            //
-
 
             return resultsStrArray;
         }
@@ -236,7 +266,6 @@ public class PosterListFragment extends Fragment {
 
                 URL url = new URL(builtUri.toString());
 
-//                Log.v(LOG_TAG, "Built URI: " + builtUri.toString());
 
                 urlConnection = (HttpURLConnection) url.openConnection();
                 urlConnection.setRequestMethod("GET");
@@ -257,7 +286,6 @@ public class PosterListFragment extends Fragment {
                     return null;
                 }
                 movieJsonStr = buffer.toString();
-//                Log.v(LOG_TAG, "JSON string: "+ movieJsonStr);
 
             } catch(IOException e)
             {
@@ -286,56 +314,47 @@ public class PosterListFragment extends Fragment {
             }
             return null;
 
-
-
         }
 
         @Override
         protected void onPostExecute(MovieElement[] result) {
             super.onPostExecute(result);
             mMovies = new ArrayList<MovieElement>();
-//            Log.v(LOG_TAG, "Movie array: " + result.toString());
             if(result != null){
                 mMovies.clear();
                 //loop to pass result into an arrayList of MovieElements
                 for(int i = 0; i < result.length;i++)
                 {
                     mMovies.add(result[i]);
-//                    Log.v(LOG_TAG, "Movie: " + result[i].toString());
 
                 }
             }
-
             //hook up gridview to the adapter
             mMoviesAdapter = new ImageAdapter(getContext(), mMovies);
 
             posterGridView.setAdapter(mMoviesAdapter);
 
             //TODO: This now needs to pass a Uri bundle through an intent.
+            //TODO: DO we really need two very similar methods for favourites and popular?
 
             posterGridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> adapterView, View view, int position, long l)
-            {
-                //trying to get movie_element object through the adapter.
-                MovieElement movie =  mMovies.get(position);
+                @Override
+                public void onItemClick(AdapterView<?> adapterView, View view, int position, long l)
+                {
+                    //trying to get movie_element object through the adapter.
+                    MovieElement movie =  mMovies.get(position);
                 String mbd_id = movie.getMovieId();
 
-                //TODO: pass the mbd_id to build a uri based on db id.
-                //TODO: the only way of id'ing the movie is through its position and its details inside the
-                //TODO: movie object. So the URI builder needs to find the id and return the corresponding row
-                //TODO: If not ID, then how do we access the _ID of the row and bundle that?
-
-                //build a query that effectively gets * for a row where column_db_id == mbdid
-
+                // if mobile
                 Bundle movieArgs = new Bundle();
                         Uri dbIdUri = moviesContract.MoviesEntry.buildMovieWithDbId(
                                 mbd_id);
                 movieArgs.putParcelable("dbIdUri", dbIdUri);
-                Log.v(LOG_TAG, "mdb_id uri: " + dbIdUri.toString());
                 Intent detailIntent = new Intent(getActivity(), DetailActivity.class).
                         putExtras(movieArgs);
                 PosterListFragment.this.startActivity(detailIntent);
+
+                    //if tablet
             }
 
         });
@@ -345,7 +364,73 @@ public class PosterListFragment extends Fragment {
 
     }
 
+    @TargetApi(16)
+    protected void favouritesTask(){
+        //this needs to query the database and populate the view and then support an onClick
 
+        String favouriteWeWant = "0";
+        Uri favouriteUri = moviesContract.MoviesEntry.buildFavouriteMoviesUriWithFavouriteStatus(favouriteWeWant);
+        String sortOrder = ".desc";
+        String[] selectionArgs = {favouriteWeWant};
+        String mSelectionClause = moviesContract.MoviesEntry.COLUMN_FAVOURITE + " = ? ";
+        Log.v(LOG_TAG, "selectionClause: " + mSelectionClause);
+        Log.v(LOG_TAG, "faveUri: " + favouriteUri);
+        Cursor favouritesCursor = getContext().getContentResolver().query(
+                favouriteUri,
+                MOVIE_COLUMNS,
+                null,
+                null,
+                null
+        );
+        int favouritesLength = favouritesCursor.getCount();
+        Log.v(LOG_TAG, "faveLength: " + favouritesLength);
+        favouritesCursor.moveToFirst();
+
+       final ArrayList<MovieElement> favouriteMovies = new ArrayList<MovieElement>();
+        for(int i= 0;i < favouritesLength || i < 20; i++) {
+            String title = favouritesCursor.getString(COL_MOVIE_TITLE);
+            String synopsis = favouritesCursor.getString(COL_MOVIE_OVERVIEW);
+            String userRating = favouritesCursor.getString(COL_MOVIE_VOTE);
+            String releaseDate = favouritesCursor.getString(COL_MOVIE_RELEASE);
+            String posterPath = favouritesCursor.getString(COL_MOVIE_POSTER_PATH);
+            Log.v(LOG_TAG, "favePoster: " + posterPath);
+            int favouriteStatus = favouritesCursor.getInt(COL_MOVIE_FAVOURITE);
+            String db_id = favouritesCursor.getString(COL_MOVIE_DB_ID);
+
+            MovieElement favouriteMovie = new MovieElement();
+
+            favouriteMovie.setTitle(title);
+            favouriteMovie.setSynopsis(synopsis);
+            favouriteMovie.setUserRating(userRating);
+            favouriteMovie.setReleaseDate(releaseDate);
+            favouriteMovie.setPosterUrl(posterPath);
+            favouriteMovie.setFavouriteStatus(favouriteStatus);
+            favouriteMovie.setMovieId(db_id);
+            favouriteMovies.add(favouriteMovie);
+            favouritesCursor.moveToNext();
+        }
+        ImageAdapter faveMoviesAdapter = new ImageAdapter(getContext(), favouriteMovies);
+        posterGridView.setAdapter(faveMoviesAdapter);
+
+        posterGridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int position, long l) {
+
+                MovieElement movie = favouriteMovies.get(position);
+                String mbd_id = movie.getMovieId();
+                //if mobile
+                Bundle movieArgs = new Bundle();
+                Uri dbIdUri = moviesContract.MoviesEntry.buildMovieWithDbId(
+                        mbd_id);
+                movieArgs.putParcelable("dbIdUri", dbIdUri);
+                Intent detailIntent = new Intent(getActivity(), DetailActivity.class).
+                        putExtras(movieArgs);
+                PosterListFragment.this.startActivity(detailIntent);
+                //if tablet
+
+            }
+        });
+    }
 
 
 }

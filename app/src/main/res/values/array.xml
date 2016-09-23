@@ -7,6 +7,9 @@
     <item
         >@string/pref_search_category_top_rated_label
     </item>
+    <item
+        >@string/pref_search_category_favourites_label
+    </item>
 </string-array>
     <string-array name="pref_search_category_values">
     <item
@@ -14,6 +17,9 @@
     </item>
     <item
         >@string/pref_search_category_top_rated
+    </item>
+    <item
+        >@string/pref_search_category_favourites
     </item>
     </string-array>
 </resources>

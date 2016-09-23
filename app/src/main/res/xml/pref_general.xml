@@ -7,6 +7,5 @@
         android:title="@string/pref_search_category_title"
         android:entries="@array/pref_search_category_options"
         android:entryValues="@array/pref_search_category_values"
-
             />
 </PreferenceScreen>

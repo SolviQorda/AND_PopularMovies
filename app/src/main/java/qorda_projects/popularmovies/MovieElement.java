@@ -15,6 +15,7 @@ public class MovieElement implements Parcelable {
     String movie_id;
     MovieReview[] movie_reviews;
     MovieTrailer[] movie_trailers;
+    int favourite_status;
     //TODO: add reviews and videos - do these need to go as String[]?
 
     //T Siciliani says - no arg constructor
@@ -67,6 +68,10 @@ public class MovieElement implements Parcelable {
     public MovieTrailer[] getMovieTrailers() {return movie_trailers;}
 
     public void setMovie_trailers(MovieTrailer[] movieTrailers) {this.movie_trailers = movieTrailers;}
+
+    public int getFavouriteStatus() {return favourite_status;}
+
+    public void setFavouriteStatus(int favouriteStatus) {this.favourite_status = favouriteStatus;}
 
 
     @Override

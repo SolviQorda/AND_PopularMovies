@@ -47,14 +47,22 @@ public class moviesContract {
         }
 
        public static String getDbIdFrmUri(Uri uri){
-           return uri.getPathSegments().get(6);
+           return uri.getPathSegments().get(1);
        }
+        //start with a string and see if that parses
+        public static String getFavouriteStatusFromUri(Uri uri){
+            return uri.getPathSegments().get(1);
+        }
 
         //what would be the sql uri needed to access the column 'id'?
 
         public static Uri buildMovieWithDbId(String dbId) {
             return CONTENT_URI.buildUpon().appendPath(dbId).build();
 
+        }
+
+        public static Uri buildFavouriteMoviesUriWithFavouriteStatus(String status) {
+            return CONTENT_URI.buildUpon().appendPath(status).build();
         }
 
     }

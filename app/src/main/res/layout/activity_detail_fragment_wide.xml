@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<RelativeLayout
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+>
+    <TextView
+        android:id="@+id/detail_title"
+        android:text="@string/app_name"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:textSize="@dimen/title_text_size"
+        android:padding="@dimen/padding_constant"
+        android:paddingTop="15dp"
+        android:paddingBottom="15dp"
+        android:background="@color/colorAccent"
+        android:textColor="@color/colorTitle"
+    />
+    <!--set these values as styles-->
+
+    <ImageView
+        android:id="@+id/thumbnail"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/detail_title"
+        android:padding="@dimen/padding_constant"/>
+
+    <LinearLayout
+        android:id="@+id/release_and_rating"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:layout_toRightOf="@+id/thumbnail"
+        android:layout_below="@+id/detail_title">
+
+
+        <TextView
+            android:id="@+id/detail_releaseDate"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:padding="@dimen/padding_constant"
+            android:textSize="@dimen/subheading_size"
+        />
+        <TextView
+            android:id="@+id/detail_userRating"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:padding="@dimen/padding_constant"
+            android:textSize="@dimen/content_size"
+            android:textStyle="italic"/>
+
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/detail_favourites"
+            android:textColor="@color/colorTitle"
+            android:background="@color/colorAccent"
+        />
+
+    </LinearLayout>
+    <TextView
+        android:id="@+id/detail_synopsis"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/thumbnail"
+        android:padding="@dimen/padding_constant"
+        android:textSize="@dimen/content_size"
+    />
+
+
+    <!-- listView for trailers-->
+    <!--<LinearLayout android:layout_width="match_parent"-->
+    <!--android:layout_height="match_parent"-->
+    <!--android:layout_below="@+id/detail_synopsis"-->
+    <!--android:orientation="vertical">-->
+    <ListView
+        android:id="@+id/listView_trailers"
+        android:layout_width="match_parent"
+        android:layout_height="200dp"
+        android:layout_below="@+id/detail_synopsis"
+
+    >
+
+    </ListView>
+
+    <!--listView for reviews-->
+    <ListView
+
+        android:id="@+id/listView_reviews"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/listView_trailers"
+        android:layout_marginBottom="20dp"
+
+    >
+    </ListView>
+
+
+
+</RelativeLayout>

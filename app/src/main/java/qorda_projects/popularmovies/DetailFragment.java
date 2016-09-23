@@ -18,6 +18,7 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.squareup.picasso.Picasso;
 
@@ -47,9 +48,14 @@ public class DetailFragment extends Fragment implements LoaderManager.LoaderCall
     public final String LOG_TAG = DetailFragment.class.getSimpleName();
     public String mdbId;
     private Uri mUri;
+    private int favourite;
+
 
     public static ArrayList<MovieTrailer> mTrailers;
     public static ArrayList<MovieReview> mReviews;
+
+    public final String REMOVE_FROM_FAVOURITES = "Remove From Favourites";
+    public final String ADD_TO_FAVOURITES = "Add To Favourites";
 
 
     public final String DETAIL_URI = "URI";
@@ -93,11 +99,6 @@ public class DetailFragment extends Fragment implements LoaderManager.LoaderCall
                              Bundle savedInstanceState) {
 
         Bundle arguments = getArguments();
-        if (arguments != null) {
-
-//            mUri = arguments.getParcelable(DETAIL_URI);
-//            Log.v(LOG_TAG,"is mUri null?" + mUri);
-        }
 
         View rootView = inflater.inflate(R.layout.activity_detail_fragment, container, false);
         trailerListView = (ListView) rootView.findViewById(R.id.listView_trailers);
@@ -116,39 +117,18 @@ public class DetailFragment extends Fragment implements LoaderManager.LoaderCall
         if (intent != null) {
             Bundle args = intent.getExtras();
             mUri = args.getParcelable("dbIdUri");
-            Log.v(LOG_TAG, "mUri in DF" + mUri);
 
             String idStr = mUri.toString();
             mdbId = idStr.substring(55);
-            Log.v(LOG_TAG, "mdbId slice" + mdbId);
 
-//            //cursor to access the
-//            Cursor retMovie = getContext().getContentResolver().query(mUri, DETAIL_COLUMNS, null, null, null);
-//            retMovie.moveToFirst();
-
-//            String synopsis = retMovie.getString(1);
-//            String title = retMovie.getString(2);
-//            String userRating = retMovie.getString(3);
-//            String releaseDate = retMovie.getString(4);
-//              mdbId = retMovie.getString(5);
-//            int favourite = retMovie.getInt(6);
-//            String posterPath = retMovie.getString(7);
-//            Log.v(LOG_TAG, "posterpathfromcurso:" + posterPath);
-//
- MovieElement movie = new MovieElement();
-//            movie.setSynopsis(synopsis);
-//            movie.setTitle(title);
-//            movie.setUserRating(userRating);
-//            movie.setReleaseDate(releaseDate);
-             movie.setMovieId(mdbId);
-//            movie.setPosterUrl(posterPath);
-
+            MovieElement movie = new MovieElement();
 
             //TODO:Make this an independent method and place in an exception
 
-
             fetchTrailersAndReviews fetchTrailersAndReviewsTask = new fetchTrailersAndReviews();
             fetchTrailersAndReviewsTask.execute(movie);
+
+
         }
 
         return rootView;
@@ -182,17 +162,17 @@ public class DetailFragment extends Fragment implements LoaderManager.LoaderCall
             String synopsis = data.getString(COL_MOVIE_OVERVIEW);
             String posterUrl = data.getString(COL_MOVIE_POSTER_PATH);
             int movieDbId = data.getInt(COL_MOVIE_DB_ID);
-            int favourite = data.getInt(COL_MOVIE_FAVOURITE);
+            favourite = data.getInt(COL_MOVIE_FAVOURITE);
             String favouriteStr;
             String tableId = data.getString(COL_MOVIE_TABLE_ID);
             String title = data.getString(COL_MOVIE_TITLE);
             String userRating = data.getString(COL_MOVIE_VOTE) + "/10";
             String releaseDate = data.getString(COL_MOVIE_RELEASE).substring(0, 4);
-
-            if(favourite == 1){
-                favouriteStr = "Remove From Favourites";
+            Log.v(LOG_TAG, "faveStat of" + title + "is" + Integer.toString(favourite));
+            if(favourite == 0){
+                favouriteStr = REMOVE_FROM_FAVOURITES;
             } else {
-                favouriteStr = "Add To Favourites";
+                favouriteStr = ADD_TO_FAVOURITES;
             }
 
             mSynopsisView.setText(synopsis);
@@ -214,8 +194,42 @@ public class DetailFragment extends Fragment implements LoaderManager.LoaderCall
 //                    mShareActionProvider.setShareIntent(createShareForecastIntent());
 //                }
 
+            mFavouriteButton.setOnClickListener(new Button.OnClickListener(){
+
+                @Override
+                public void onClick(View view) {
+
+                    ContentValues favouriteValue = new ContentValues();
+                    Log.v(LOG_TAG, "favouriteValue: " + favouriteValue);
+                    String mSelectionClause = moviesContract.MoviesEntry.COLUMN_DB_ID + " = ?";
+                    String[] selectionArgs = {mdbId};
+                    if (favourite == 1) {
+//                        favourite = 0;
+                        favouriteValue.put(moviesContract.MoviesEntry.COLUMN_FAVOURITE, favourite - 1);
+                        getContext().getContentResolver().update(mUri, favouriteValue, mSelectionClause, selectionArgs);
+                        mFavouriteButton.setText(REMOVE_FROM_FAVOURITES);
+                        Toast.makeText(getContext(), "Added to favourites!", Toast.LENGTH_SHORT).show();
+
+                        favouriteValue.clear();
+                    }
+                     else if (favourite == 0){
+////                        favourite = 1;
+                        favouriteValue.put(moviesContract.MoviesEntry.COLUMN_DB_ID, favourite + 1);
+                        getContext().getContentResolver().update(mUri, favouriteValue, mSelectionClause, selectionArgs);
+                        mFavouriteButton.setText(ADD_TO_FAVOURITES);
+                        Toast.makeText(getContext(), "Removed from favourites", Toast.LENGTH_SHORT).show();
+
+                    }
+                    Log.v(LOG_TAG, "favouriteValue: " + favouriteValue);
+
+                }
+
+            });
+
         }
     }
+
+    //TODO: Refactor this into a separate class
 
     @Override
     public void onLoaderReset(Loader<Cursor> cursorloader) { }

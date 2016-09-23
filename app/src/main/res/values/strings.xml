@@ -12,6 +12,8 @@
     <string name="pref_search_category_popularity_label" translatable="true">Popularity</string>
     <string name="pref_search_category_top_rated" translatable="true">top_rated</string>
     <string name="pref_search_category_top_rated_label" translatable="true">Top Rated</string>
+    <string name="pref_search_category_favourites" translatable="true">favourites</string>
+    <string name="pref_search_category_favourites_label" translatable="false">Favourites</string>
     <string name="pref_search_category_title" translatable="true">Search By</string>
 
     <string name="trailer_watch" translatable="true">Watch Trailer</string>

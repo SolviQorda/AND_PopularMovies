@@ -18,9 +18,9 @@ public class DetailActivity extends AppCompatActivity {
         setContentView(R.layout.activity_detail);
 
         if (savedInstanceState == null) {
-            getSupportFragmentManager().beginTransaction().
-                    add(R.id.movie_detail_container, new DetailFragment()).
-                    commit();
+//            getSupportFragmentManager().beginTransaction().
+//                    add(R.id.movie_detail_container, new DetailFragment()).
+//                    commit();
 
             Bundle arguments = new Bundle();
             if (arguments != null) {
@@ -29,10 +29,10 @@ public class DetailActivity extends AppCompatActivity {
             DetailFragment detailFragment = new DetailFragment();
             detailFragment.setArguments(arguments);
 
-            getSupportFragmentManager().beginTransaction().add(R.id.movie_detail_container, detailFragment)
+            getSupportFragmentManager().beginTransaction().add(R.id.container, detailFragment)
                     .commit();
-        }
 
+        }
 
     }
 }

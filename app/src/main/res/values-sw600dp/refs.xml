@@ -1,0 +1,4 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <item type="layout" name="activity_detail_fragment">@layout/activity_detail_fragment_wide</item>
+</resources>

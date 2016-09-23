@@ -5,7 +5,6 @@ import android.content.ContentValues;
 import android.content.UriMatcher;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
-import android.database.sqlite.SQLiteQueryBuilder;
 import android.net.Uri;
 import android.util.Log;
 
@@ -23,23 +22,38 @@ public class moviesProvider extends ContentProvider{
     //Integer constants for URI types --> how do we know what these need to be?
     static final int MOVIES = 100;
     static final int MOVIE_SINGLE = 101;
+    static final int MOVIES_FAVOURITES = 200;
 
-    private static final SQLiteQueryBuilder sMoviesByIdQueryBuilder;
 
-    static{
-        sMoviesByIdQueryBuilder = new SQLiteQueryBuilder();
-    }
     private static String sMovieByIdSetting =
             moviesContract.MoviesEntry.TABLE_NAME + "." +
                     moviesContract.MoviesEntry.COLUMN_DB_ID + " = ? ";
 
+    //is there we want to write select * from movies where favourite=0?
+    private static String sMoviesByFavouriteSetting =
+            moviesContract.MoviesEntry.TABLE_NAME + "." +
+                    moviesContract.MoviesEntry.COLUMN_FAVOURITE + " = ? ";
+
     private Cursor getMovieById(Uri uri, String[] projection, String sortOrder) {
         String idSetting = moviesContract.MoviesEntry.getDbIdFrmUri(uri);
 
-        return sMoviesByIdQueryBuilder.query(mDbHelper.getWritableDatabase(),
+        return mDbHelper.getWritableDatabase().query(moviesContract.MoviesEntry.TABLE_NAME,
                 projection,
                 sMovieByIdSetting,
                 new String[]{idSetting},
+                null,
+                null,
+                sortOrder
+        );
+    }
+
+    private Cursor getMoviesByFavourite(Uri uri, String[] projection, String sortOrder) {
+        String favouriteSetting = moviesContract.MoviesEntry.getFavouriteStatusFromUri(uri);
+
+        return mDbHelper.getWritableDatabase().query(moviesContract.MoviesEntry.TABLE_NAME,
+                projection,
+                sMoviesByFavouriteSetting,
+                new String[]{favouriteSetting},
                 null,
                 null,
                 sortOrder
@@ -52,7 +66,7 @@ public class moviesProvider extends ContentProvider{
         final String authority = moviesContract.CONTENT_AUTHORITY;
 
         matcher.addURI(authority, moviesContract.PATH_MOVIES, MOVIES);
-        //putting a * because the MDB_ID is a string in the sql db
+        matcher.addURI(authority, moviesContract.PATH_MOVIES + "/0", MOVIES_FAVOURITES);
         matcher.addURI(authority, moviesContract.PATH_MOVIES + "/#", MOVIE_SINGLE);
 
         return matcher;
@@ -74,6 +88,8 @@ public class moviesProvider extends ContentProvider{
             return moviesContract.MoviesEntry.CONTENT_TYPE;
             case(MOVIE_SINGLE):
             return moviesContract.MoviesEntry.CONTENT_ITEM_TYPE;
+            case(MOVIES_FAVOURITES):
+            return moviesContract.MoviesEntry.CONTENT_TYPE;
             default:
                 throw new UnsupportedOperationException("Unknown uri: " + uri);
         }
@@ -102,6 +118,19 @@ public class moviesProvider extends ContentProvider{
                 //getMovieByid
                 retCursor = getMovieById(uri, projection, sortOrder);
                 break;
+            case(MOVIES_FAVOURITES):
+//                        retCursor = mDbHelper.getReadableDatabase().query(
+//                                moviesContract.MoviesEntry.TABLE_NAME,
+//                                projection,
+//                                selection,
+//                                selectionArgs,
+//                                null,
+//                                null,
+//                                sortOrder
+//
+//                );
+            retCursor = getMoviesByFavourite(uri, projection, sortOrder);
+                    break;
 
             default:
                 throw new UnsupportedOperationException("Unknown uri: " + uri);
@@ -137,10 +166,20 @@ public class moviesProvider extends ContentProvider{
     public int update(Uri uri, ContentValues contentValues, String selection, String[] selectionArgs) {
         final SQLiteDatabase db = mDbHelper.getWritableDatabase();
         //for use if more cases
+        int rowsUpdated;
         final int match = mUriMatcher.match(uri);
 
-        int rowsUpdated = db.update(moviesContract.MoviesEntry.TABLE_NAME, contentValues, selection, selectionArgs);
+        switch(match) {
+            case(MOVIES):
+                rowsUpdated = db.update(moviesContract.MoviesEntry.TABLE_NAME, contentValues, selection, selectionArgs);
+                break;
 
+            case(MOVIE_SINGLE):
+                rowsUpdated = db.update(moviesContract.MoviesEntry.TABLE_NAME, contentValues, selection, selectionArgs);
+                break;
+            default:
+                throw new UnsupportedOperationException("Unknown uri " + uri);
+        }
         if (rowsUpdated != 1) {
             getContext().getContentResolver().notifyChange(uri, null);
         }

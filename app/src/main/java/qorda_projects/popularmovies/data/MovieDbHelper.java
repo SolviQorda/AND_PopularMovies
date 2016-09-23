@@ -20,7 +20,6 @@ public class MovieDbHelper extends SQLiteOpenHelper{
     @Override
     public void onCreate(SQLiteDatabase sqLiteDatabase){
 
-
         final String SQL_CREATE_MOVIES_TABLE = "CREATE TABLE " + moviesContract.MoviesEntry.TABLE_NAME + " (" +
                 moviesContract.MoviesEntry._ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
                 moviesContract.MoviesEntry.COLUMN_POSTER_PATH + " TEXT NOT NULL, " +
