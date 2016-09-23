@@ -50,6 +50,7 @@ public class PosterListFragment extends Fragment{
     private int mPosition = ListView.INVALID_POSITION;
     public GridView posterGridView;
     public static ArrayList<MovieElement> mMovies;
+    public boolean isTablet;
 
     private static final String[] MOVIE_COLUMNS = {
             moviesContract.MoviesEntry.TABLE_NAME + "." + moviesContract.MoviesEntry._ID,
@@ -92,6 +93,8 @@ public class PosterListFragment extends Fragment{
 
         final View rootView = inflater.inflate(R.layout.fragment_poster_list, container, false);
         posterGridView = (GridView) rootView.findViewById(R.id.gridview_posters);
+
+        isTablet = ((MainActivity) getActivity()).isTablet();
 
         if (savedInstanceState != null && savedInstanceState.containsKey(SELECTED_KEY)){
             mPosition = savedInstanceState.getInt(SELECTED_KEY);
@@ -344,17 +347,21 @@ public class PosterListFragment extends Fragment{
                     //trying to get movie_element object through the adapter.
                     MovieElement movie =  mMovies.get(position);
                 String mbd_id = movie.getMovieId();
+                    Bundle movieArgs = new Bundle();
+                    Uri dbIdUri = moviesContract.MoviesEntry.buildMovieWithDbId(
+                            mbd_id);
+                    movieArgs.putParcelable("dbIdUri", dbIdUri);
 
-                // if mobile
-                Bundle movieArgs = new Bundle();
-                        Uri dbIdUri = moviesContract.MoviesEntry.buildMovieWithDbId(
-                                mbd_id);
-                movieArgs.putParcelable("dbIdUri", dbIdUri);
-                Intent detailIntent = new Intent(getActivity(), DetailActivity.class).
-                        putExtras(movieArgs);
-                PosterListFragment.this.startActivity(detailIntent);
+                    if (!isTablet) {
 
-                    //if tablet
+                        Intent detailIntent = new Intent(getActivity(), DetailActivity.class).
+                                putExtras(movieArgs);
+                        PosterListFragment.this.startActivity(detailIntent);
+                    } else {
+                        //if tablet
+                        DetailFragment fragment = new DetailFragment();
+                        fragment.setArguments(movieArgs);
+                    }
             }
 
         });
@@ -423,11 +430,16 @@ public class PosterListFragment extends Fragment{
                 Uri dbIdUri = moviesContract.MoviesEntry.buildMovieWithDbId(
                         mbd_id);
                 movieArgs.putParcelable("dbIdUri", dbIdUri);
-                Intent detailIntent = new Intent(getActivity(), DetailActivity.class).
-                        putExtras(movieArgs);
-                PosterListFragment.this.startActivity(detailIntent);
-                //if tablet
 
+                if(!isTablet) {
+                    Intent detailIntent = new Intent(getActivity(), DetailActivity.class).
+                            putExtras(movieArgs);
+                    PosterListFragment.this.startActivity(detailIntent);
+                }else {
+                //if tablet
+                    DetailFragment fragment = new DetailFragment();
+                    fragment.setArguments(movieArgs);
+                }
             }
         });
     }

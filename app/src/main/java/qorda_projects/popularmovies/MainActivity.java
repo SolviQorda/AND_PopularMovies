@@ -12,7 +12,7 @@ public class MainActivity extends AppCompatActivity implements PosterListFragmen
     private static final String LOG_TAG = PosterListFragment.class.getSimpleName();
     private static final String DETAILFRAGMENT_TAG = "DFTAG";
 
-    private boolean mTwoPane;
+    private boolean mTwoPane = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -36,6 +36,10 @@ public class MainActivity extends AppCompatActivity implements PosterListFragmen
         }
 
 
+    }
+
+    public boolean isTablet() {
+        return mTwoPane;
     }
 
 

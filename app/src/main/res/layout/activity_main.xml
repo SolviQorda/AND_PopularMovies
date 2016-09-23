@@ -3,7 +3,7 @@
              android:id="@+id/container_main"
              android:layout_width="match_parent"
              android:layout_height="match_parent"
-
-             tools:context=".MainActivity"
+            android:name="qorda_projects.popularmovies.PosterListFragment"
+             tools:context="qorda_projects.popularmovies.PosterListFragment"
              tools:ignore="MergeRootFrame" />
     <!-- TODO: does this context need to change to posterlistfragment -->
