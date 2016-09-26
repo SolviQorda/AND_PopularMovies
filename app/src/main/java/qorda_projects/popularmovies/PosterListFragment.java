@@ -22,7 +22,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.GridView;
-import android.widget.ListView;
 import android.widget.Toast;
 
 import org.json.JSONArray;
@@ -47,7 +46,7 @@ public class PosterListFragment extends Fragment{
     private static final String LOG_TAG = PosterListFragment.class.getSimpleName();
     private static final String SELECTED_KEY = "selected_position";
     public static ImageAdapter mMoviesAdapter;
-    private int mPosition = ListView.INVALID_POSITION;
+    private int mPosition = GridView.INVALID_POSITION;
     public GridView posterGridView;
     public static ArrayList<MovieElement> mMovies;
     public boolean isTablet;
@@ -78,7 +77,7 @@ public class PosterListFragment extends Fragment{
     }
 
     public interface Callback {
-        public void onItemSelected(Uri dateUri);
+        public void onItemSelected(Uri movieUri);
     }
 
     @Override
@@ -110,6 +109,8 @@ public class PosterListFragment extends Fragment{
             Toast.makeText(getContext(), getString(R.string.no_network_error), Toast.LENGTH_LONG).show();
             return rootView;
         }
+
+
 
     }
 
@@ -170,7 +171,15 @@ public class PosterListFragment extends Fragment{
         return netInfo != null && netInfo.isConnectedOrConnecting();
     }
 
-    public class fetchMoviesTask extends AsyncTask<String, Void, MovieElement[]> {
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
+        if (mPosition != GridView.INVALID_POSITION) {
+            outState.putInt(SELECTED_KEY, mPosition);
+        }
+        super.onSaveInstanceState(outState);
+
+    }
+        public class fetchMoviesTask extends AsyncTask<String, Void, MovieElement[]> {
 
         //TODO: does it make sense to not use a movieelement object when we have a database?
         //NEED SOME KIND OF CHECK THAT THERE ISN'T A DATABASE
@@ -346,17 +355,17 @@ public class PosterListFragment extends Fragment{
                 {
                     //trying to get movie_element object through the adapter.
                     MovieElement movie =  mMovies.get(position);
-                String mbd_id = movie.getMovieId();
+                    String mbd_id = movie.getMovieId();
                     Bundle movieArgs = new Bundle();
                     Uri dbIdUri = moviesContract.MoviesEntry.buildMovieWithDbId(
                             mbd_id);
                     movieArgs.putParcelable("dbIdUri", dbIdUri);
-
+                    ((Callback) getActivity()).onItemSelected(dbIdUri);
+                    Log.v(LOG_TAG, "dbIdUri: " + dbIdUri);
                     if (!isTablet) {
 
-                        Intent detailIntent = new Intent(getActivity(), DetailActivity.class).
-                                putExtras(movieArgs);
-                        PosterListFragment.this.startActivity(detailIntent);
+//                        Intent detailIntent = new Intent(getActivity(), DetailActivity.class);
+//                        PosterListFragment.this.startActivity(detailIntent);
                     } else {
                         //if tablet
                         DetailFragment fragment = new DetailFragment();
@@ -364,7 +373,11 @@ public class PosterListFragment extends Fragment{
                     }
             }
 
-        });
+            });
+
+            if(mPosition != GridView.INVALID_POSITION) {
+                posterGridView.smoothScrollToPosition(mPosition);
+            }
 
         }
 
@@ -394,7 +407,7 @@ public class PosterListFragment extends Fragment{
         favouritesCursor.moveToFirst();
 
        final ArrayList<MovieElement> favouriteMovies = new ArrayList<MovieElement>();
-        for(int i= 0;i < favouritesLength || i < 20; i++) {
+        for(int i= 0;i < 20; i++) {
             String title = favouritesCursor.getString(COL_MOVIE_TITLE);
             String synopsis = favouritesCursor.getString(COL_MOVIE_OVERVIEW);
             String userRating = favouritesCursor.getString(COL_MOVIE_VOTE);
@@ -430,11 +443,12 @@ public class PosterListFragment extends Fragment{
                 Uri dbIdUri = moviesContract.MoviesEntry.buildMovieWithDbId(
                         mbd_id);
                 movieArgs.putParcelable("dbIdUri", dbIdUri);
+                ((Callback) getActivity()).onItemSelected(dbIdUri);
+                Log.v(LOG_TAG, "dbiduri: " + dbIdUri);
 
                 if(!isTablet) {
-                    Intent detailIntent = new Intent(getActivity(), DetailActivity.class).
-                            putExtras(movieArgs);
-                    PosterListFragment.this.startActivity(detailIntent);
+//                    Intent detailIntent = new Intent(getActivity(), DetailActivity.class);
+//                    PosterListFragment.this.startActivity(detailIntent);
                 }else {
                 //if tablet
                     DetailFragment fragment = new DetailFragment();

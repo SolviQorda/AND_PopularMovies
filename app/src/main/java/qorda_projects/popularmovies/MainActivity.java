@@ -12,7 +12,7 @@ public class MainActivity extends AppCompatActivity implements PosterListFragmen
     private static final String LOG_TAG = PosterListFragment.class.getSimpleName();
     private static final String DETAILFRAGMENT_TAG = "DFTAG";
 
-    private boolean mTwoPane = false;
+    private boolean mTwoPane;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -24,17 +24,15 @@ public class MainActivity extends AppCompatActivity implements PosterListFragmen
             mTwoPane = true;
             if (savedInstanceState == null) {
                 getSupportFragmentManager().beginTransaction()
-                        .add(R.id.movie_detail_container, new PosterListFragment())
+                        .replace(R.id.movie_detail_container, new DetailFragment())
                         .commit();
             } else {
                 mTwoPane = false;
             }
 
-            PosterListFragment posterListFragment = ((PosterListFragment)getSupportFragmentManager()
-                .findFragmentById(R.id.container_main));
-
+//            PosterListFragment posterListFragment = ((PosterListFragment)getSupportFragmentManager()
+//                .findFragmentById(R.id.container_main));
         }
-
 
     }
 
@@ -70,13 +68,14 @@ public class MainActivity extends AppCompatActivity implements PosterListFragmen
     protected void onResume()
     {
         super.onResume();
+
     }
 
     @Override
     public void onItemSelected(Uri contentUri) {
         if(mTwoPane) {
             Bundle args = new Bundle();
-            //TODO: how do we make sure that the parcelable puts the right uri?
+
             args.putParcelable("URI", contentUri);
 
             DetailFragment fragment = new DetailFragment();
@@ -87,8 +86,8 @@ public class MainActivity extends AppCompatActivity implements PosterListFragmen
                     .commit();
         } else {
             Intent intent = new Intent(this, DetailActivity.class)
-                    .setData(contentUri);
-            startActivity(intent);
-        }
+                .setData(contentUri);
+        startActivity(intent);
+    }
     }
 }

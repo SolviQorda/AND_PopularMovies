@@ -1,7 +1,6 @@
 package qorda_projects.popularmovies;
 
 import android.content.ContentValues;
-import android.content.Intent;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.AsyncTask;
@@ -99,6 +98,13 @@ public class DetailFragment extends Fragment implements LoaderManager.LoaderCall
                              Bundle savedInstanceState) {
 
         Bundle arguments = getArguments();
+        if(arguments != null){
+            mUri = arguments.getParcelable("URI");
+            if (mUri != null) {
+                String idStr = mUri.toString();
+                mdbId = idStr.substring(55);
+            }
+        }
 
         View rootView = inflater.inflate(R.layout.activity_detail_fragment, container, false);
         trailerListView = (ListView) rootView.findViewById(R.id.listView_trailers);
@@ -113,24 +119,15 @@ public class DetailFragment extends Fragment implements LoaderManager.LoaderCall
 
         //TODO: Call database with mUri to construct a movie object.
 
-        Intent intent = getActivity().getIntent();
-        if (intent != null) {
-            Bundle args = intent.getExtras();
-            mUri = args.getParcelable("dbIdUri");
+                MovieElement movie = new MovieElement();
 
-            String idStr = mUri.toString();
-            mdbId = idStr.substring(55);
+                //TODO:Make this an independent method and place in an exception
+            if(mdbId != null) {
+                fetchTrailersAndReviews fetchTrailersAndReviewsTask = new fetchTrailersAndReviews();
+                fetchTrailersAndReviewsTask.execute(movie);
 
-            MovieElement movie = new MovieElement();
-
-            //TODO:Make this an independent method and place in an exception
-
-            fetchTrailersAndReviews fetchTrailersAndReviewsTask = new fetchTrailersAndReviews();
-            fetchTrailersAndReviewsTask.execute(movie);
-
-
-        }
-
+            }
+        Log.v(LOG_TAG, "mdbId:" + mdbId);
         return rootView;
     }
 
@@ -214,7 +211,7 @@ public class DetailFragment extends Fragment implements LoaderManager.LoaderCall
                     }
                      else if (favourite == 0){
 ////                        favourite = 1;
-                        favouriteValue.put(moviesContract.MoviesEntry.COLUMN_DB_ID, favourite + 1);
+                        favouriteValue.put(moviesContract.MoviesEntry.COLUMN_FAVOURITE, favourite + 1);
                         getContext().getContentResolver().update(mUri, favouriteValue, mSelectionClause, selectionArgs);
                         mFavouriteButton.setText(ADD_TO_FAVOURITES);
                         Toast.makeText(getContext(), "Removed from favourites", Toast.LENGTH_SHORT).show();
@@ -449,25 +446,19 @@ public class DetailFragment extends Fragment implements LoaderManager.LoaderCall
         @Override
         protected void onPostExecute(MovieElement result) {
             super.onPostExecute(result);
-            Log.v(LOG_TAG, "result: " + trailersAndReviews.toString());
-            MovieTrailer[] trailersArray = trailersAndReviews.getMovieTrailers();
-            Log.v(LOG_TAG, "trailersb4AS:" + trailersArray.toString());
-            MovieReview[] reviewsArray = trailersAndReviews.getMovieReviews();
-//                result.setMovie_trailers(trailersArray);
-//                result.setMovieReviews(reviewsArray);
 
-            //What does it need to do if the data has been written to the db?
-
-            //TODO: populate List views with an array adapter
-
-            mTrailers = new ArrayList<MovieTrailer>(Arrays.asList(trailersArray));
-            mReviews = new ArrayList<MovieReview>(Arrays.asList(reviewsArray));
-
-
-            Log.v(LOG_TAG, "mTrailers: " + mTrailers.toString());
+            if (trailersAndReviews!= null) {
+                MovieTrailer[] trailersArray = trailersAndReviews.getMovieTrailers();
+                MovieReview[] reviewsArray = trailersAndReviews.getMovieReviews();
+                if (trailersArray != null) {
+                    mTrailers = new ArrayList<MovieTrailer>(Arrays.asList(trailersArray));
+                }
+                if(reviewsArray != null){
+                mReviews = new ArrayList<MovieReview>(Arrays.asList(reviewsArray));
+                }
+            }
             if (mTrailers != null) {
                 TrailerAdapter trailerArrayAdapter = new TrailerAdapter(getContext(), mTrailers);
-                Log.v(LOG_TAG, "ope mtrailers" + mTrailers.toString());
                 trailerListView.setAdapter(trailerArrayAdapter);
 
             }
