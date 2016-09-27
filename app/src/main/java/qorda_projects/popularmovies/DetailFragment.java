@@ -117,11 +117,9 @@ public class DetailFragment extends Fragment implements LoaderManager.LoaderCall
         mReleaseView = (TextView) rootView.findViewById(R.id.detail_releaseDate);
         mFavouriteButton = (Button) rootView.findViewById(R.id.detail_favourites);
 
-        //TODO: Call database with mUri to construct a movie object.
 
                 MovieElement movie = new MovieElement();
 
-                //TODO:Make this an independent method and place in an exception
             if(mdbId != null) {
                 fetchTrailersAndReviews fetchTrailersAndReviewsTask = new fetchTrailersAndReviews();
                 fetchTrailersAndReviewsTask.execute(movie);
@@ -226,7 +224,6 @@ public class DetailFragment extends Fragment implements LoaderManager.LoaderCall
         }
     }
 
-    //TODO: Refactor this into a separate class
 
     @Override
     public void onLoaderReset(Loader<Cursor> cursorloader) { }
@@ -265,13 +262,6 @@ public class DetailFragment extends Fragment implements LoaderManager.LoaderCall
                 movieReviewsResults[i] = review;
             }
 
-            //TODO: need to try and update the relevant db entry. This is probably a case to put
-            //TODO: it in a sync adapter and do it with the others
-            ContentValues movieValues = new ContentValues();
-//
-//                    movieValues.get(moviesContract.MoviesEntry.);
-//
-//                cVVector.add(movieValues);
             trailersAndReviews.setMovieReviews(movieReviewsResults);
             return movieReviewsResults;
         }

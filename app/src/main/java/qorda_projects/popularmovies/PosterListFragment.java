@@ -94,38 +94,39 @@ public class PosterListFragment extends Fragment{
         posterGridView = (GridView) rootView.findViewById(R.id.gridview_posters);
 
         isTablet = ((MainActivity) getActivity()).isTablet();
-
+        Log.v(LOG_TAG, "savedInstance: " + savedInstanceState);
         if (savedInstanceState != null && savedInstanceState.containsKey(SELECTED_KEY)){
             mPosition = savedInstanceState.getInt(SELECTED_KEY);
-        }
-        if(isOnline()) {
 
-            updateMovies();
-            return rootView;
-        }
-        else
-        {
-            //TODO: get data from db
-            Toast.makeText(getContext(), getString(R.string.no_network_error), Toast.LENGTH_LONG).show();
-            return rootView;
-        }
+            mMovies = savedInstanceState.getParcelableArrayList("mMovies");
+            Log.v(LOG_TAG, "MMovies: " + mMovies);
+            mMoviesAdapter = new ImageAdapter(getContext(), mMovies);
 
+            posterGridView.setAdapter(mMoviesAdapter);
+            buildPosters();
+            }
+        else {
+            if (savedInstanceState == null && isOnline()) {
 
+                updateMovies();
+                return rootView;
+            } else {
+                Toast.makeText(getContext(), getString(R.string.no_network_error), Toast.LENGTH_LONG).show();
+
+            }
+        }
+        return rootView;
 
     }
 
     public void onStart()
-    {
+    {super.onStart();}
 
-        super.onStart();
 
-        //TODO: replace this with a sync adapter
-        if(isOnline()) {
-
-            updateMovies();
-        }
+    @Override
+    public void onActivityCreated(Bundle savedInstanceState){
+        super.onActivityCreated(savedInstanceState);
     }
-
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater menuInflater)
     {
@@ -161,6 +162,7 @@ public class PosterListFragment extends Fragment{
             favouritesTask();
         } else {
             moviesTask.execute(sortBy);
+            buildPosters();
         }
      }
 
@@ -171,14 +173,6 @@ public class PosterListFragment extends Fragment{
         return netInfo != null && netInfo.isConnectedOrConnecting();
     }
 
-    @Override
-    public void onSaveInstanceState(Bundle outState) {
-        if (mPosition != GridView.INVALID_POSITION) {
-            outState.putInt(SELECTED_KEY, mPosition);
-        }
-        super.onSaveInstanceState(outState);
-
-    }
         public class fetchMoviesTask extends AsyncTask<String, Void, MovieElement[]> {
 
         //TODO: does it make sense to not use a movieelement object when we have a database?
@@ -332,60 +326,67 @@ public class PosterListFragment extends Fragment{
         protected void onPostExecute(MovieElement[] result) {
             super.onPostExecute(result);
             mMovies = new ArrayList<MovieElement>();
-            if(result != null){
+            if (result != null) {
                 mMovies.clear();
                 //loop to pass result into an arrayList of MovieElements
-                for(int i = 0; i < result.length;i++)
-                {
+                for (int i = 0; i < result.length; i++) {
                     mMovies.add(result[i]);
 
                 }
             }
             //hook up gridview to the adapter
             mMoviesAdapter = new ImageAdapter(getContext(), mMovies);
-
             posterGridView.setAdapter(mMoviesAdapter);
 
             //TODO: This now needs to pass a Uri bundle through an intent.
             //TODO: DO we really need two very similar methods for favourites and popular?
+        }
 
-            posterGridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-                @Override
-                public void onItemClick(AdapterView<?> adapterView, View view, int position, long l)
-                {
-                    //trying to get movie_element object through the adapter.
-                    MovieElement movie =  mMovies.get(position);
-                    String mbd_id = movie.getMovieId();
-                    Bundle movieArgs = new Bundle();
-                    Uri dbIdUri = moviesContract.MoviesEntry.buildMovieWithDbId(
-                            mbd_id);
-                    movieArgs.putParcelable("dbIdUri", dbIdUri);
-                    ((Callback) getActivity()).onItemSelected(dbIdUri);
-                    Log.v(LOG_TAG, "dbIdUri: " + dbIdUri);
-                    if (!isTablet) {
+        }
+
+    protected void buildPosters() {
+        posterGridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int position, long l) {
+                //trying to get movie_element object through the adapter.
+                mPosition = position;
+                MovieElement movie = mMovies.get(position);
+                String mbd_id = movie.getMovieId();
+                Bundle movieArgs = new Bundle();
+                Uri dbIdUri = moviesContract.MoviesEntry.buildMovieWithDbId(
+                        mbd_id);
+                movieArgs.putParcelable("dbIdUri", dbIdUri);
+                ((Callback) getActivity()).onItemSelected(dbIdUri);
+                if (!isTablet) {
 
 //                        Intent detailIntent = new Intent(getActivity(), DetailActivity.class);
 //                        PosterListFragment.this.startActivity(detailIntent);
-                    } else {
-                        //if tablet
-                        DetailFragment fragment = new DetailFragment();
-                        fragment.setArguments(movieArgs);
-                    }
+                } else {
+                    //if tablet
+                    DetailFragment fragment = new DetailFragment();
+                    fragment.setArguments(movieArgs);
+                }
+
             }
 
-            });
-
-            if(mPosition != GridView.INVALID_POSITION) {
-                posterGridView.smoothScrollToPosition(mPosition);
-            }
-
+        });
+        if (mPosition != GridView.INVALID_POSITION) {
+            posterGridView.smoothScrollToPosition(mPosition);
         }
+        Bundle movieList = new Bundle();
+
+        movieList.putParcelableArrayList("mMovies", mMovies);
+        Log.v(LOG_TAG, "mmVoies in OPE: " + movieList);
+        mMoviesAdapter = new ImageAdapter(getContext(), mMovies);
+
+        movieList.putInt(SELECTED_KEY, mPosition);
+        onSaveInstanceState(movieList);
 
 
     }
 
     @TargetApi(16)
-    protected void favouritesTask(){
+    protected void favouritesTask() {
         //this needs to query the database and populate the view and then support an onClick
 
         String favouriteWeWant = "0";
@@ -404,59 +405,98 @@ public class PosterListFragment extends Fragment{
         );
         int favouritesLength = favouritesCursor.getCount();
         Log.v(LOG_TAG, "faveLength: " + favouritesLength);
-        favouritesCursor.moveToFirst();
+        if (favouritesLength>=1){
+            favouritesCursor.moveToFirst();
+            mMovies = new ArrayList<MovieElement>();
+            if (mMovies!= null) {
+                mMovies.clear();
+            }
+            for (int i = 0; i < 20; i++) {
+                String title = favouritesCursor.getString(COL_MOVIE_TITLE);
+                String synopsis = favouritesCursor.getString(COL_MOVIE_OVERVIEW);
+                String userRating = favouritesCursor.getString(COL_MOVIE_VOTE);
+                String releaseDate = favouritesCursor.getString(COL_MOVIE_RELEASE);
+                String posterPath = favouritesCursor.getString(COL_MOVIE_POSTER_PATH);
+                Log.v(LOG_TAG, "favePoster: " + posterPath);
+                int favouriteStatus = favouritesCursor.getInt(COL_MOVIE_FAVOURITE);
+                String db_id = favouritesCursor.getString(COL_MOVIE_DB_ID);
 
-       final ArrayList<MovieElement> favouriteMovies = new ArrayList<MovieElement>();
-        for(int i= 0;i < 20; i++) {
-            String title = favouritesCursor.getString(COL_MOVIE_TITLE);
-            String synopsis = favouritesCursor.getString(COL_MOVIE_OVERVIEW);
-            String userRating = favouritesCursor.getString(COL_MOVIE_VOTE);
-            String releaseDate = favouritesCursor.getString(COL_MOVIE_RELEASE);
-            String posterPath = favouritesCursor.getString(COL_MOVIE_POSTER_PATH);
-            Log.v(LOG_TAG, "favePoster: " + posterPath);
-            int favouriteStatus = favouritesCursor.getInt(COL_MOVIE_FAVOURITE);
-            String db_id = favouritesCursor.getString(COL_MOVIE_DB_ID);
+                MovieElement favouriteMovie = new MovieElement();
 
-            MovieElement favouriteMovie = new MovieElement();
-
-            favouriteMovie.setTitle(title);
-            favouriteMovie.setSynopsis(synopsis);
-            favouriteMovie.setUserRating(userRating);
-            favouriteMovie.setReleaseDate(releaseDate);
-            favouriteMovie.setPosterUrl(posterPath);
-            favouriteMovie.setFavouriteStatus(favouriteStatus);
-            favouriteMovie.setMovieId(db_id);
-            favouriteMovies.add(favouriteMovie);
-            favouritesCursor.moveToNext();
-        }
-        ImageAdapter faveMoviesAdapter = new ImageAdapter(getContext(), favouriteMovies);
-        posterGridView.setAdapter(faveMoviesAdapter);
-
-        posterGridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> adapterView, View view, int position, long l) {
-
-                MovieElement movie = favouriteMovies.get(position);
-                String mbd_id = movie.getMovieId();
-                //if mobile
-                Bundle movieArgs = new Bundle();
-                Uri dbIdUri = moviesContract.MoviesEntry.buildMovieWithDbId(
-                        mbd_id);
-                movieArgs.putParcelable("dbIdUri", dbIdUri);
-                ((Callback) getActivity()).onItemSelected(dbIdUri);
-                Log.v(LOG_TAG, "dbiduri: " + dbIdUri);
-
-                if(!isTablet) {
-//                    Intent detailIntent = new Intent(getActivity(), DetailActivity.class);
-//                    PosterListFragment.this.startActivity(detailIntent);
-                }else {
-                //if tablet
-                    DetailFragment fragment = new DetailFragment();
-                    fragment.setArguments(movieArgs);
+                favouriteMovie.setTitle(title);
+                favouriteMovie.setSynopsis(synopsis);
+                favouriteMovie.setUserRating(userRating);
+                favouriteMovie.setReleaseDate(releaseDate);
+                favouriteMovie.setPosterUrl(posterPath);
+                favouriteMovie.setFavouriteStatus(favouriteStatus);
+                favouriteMovie.setMovieId(db_id);
+                mMovies.add(favouriteMovie);
+                if(favouritesCursor.moveToNext()!=false) {
+                    favouritesCursor.moveToNext();
                 }
             }
-        });
+
+
+            ImageAdapter faveMoviesAdapter = new ImageAdapter(getContext(), mMovies);
+            posterGridView.setAdapter(faveMoviesAdapter);
+
+            posterGridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                @Override
+                public void onItemClick(AdapterView<?> adapterView, View view, int position, long l) {
+
+                    MovieElement movie = mMovies.get(position);
+                    String mbd_id = movie.getMovieId();
+                    //if mobile
+                    Bundle movieArgs = new Bundle();
+                    Uri dbIdUri = moviesContract.MoviesEntry.buildMovieWithDbId(
+                            mbd_id);
+                    movieArgs.putParcelable("dbIdUri", dbIdUri);
+                    ((Callback) getActivity()).onItemSelected(dbIdUri);
+                    Log.v(LOG_TAG, "dbiduri: " + dbIdUri);
+
+                    if (!isTablet) {
+//                    Intent detailIntent = new Intent(getActivity(), DetailActivity.class);
+//                    PosterListFragment.this.startActivity(detailIntent);
+                    } else {
+                        //if tablet
+                        DetailFragment fragment = new DetailFragment();
+                        fragment.setArguments(movieArgs);
+                    }
+                }
+            });
+            if (mPosition != GridView.INVALID_POSITION) {
+                posterGridView.smoothScrollToPosition(mPosition);
+            }
+            Bundle movieList = new Bundle();
+
+            movieList.putParcelableArrayList("mMovies", mMovies);
+            Log.v(LOG_TAG, "mmVoies in OPE: " + movieList);
+            mMoviesAdapter = new ImageAdapter(getContext(), mMovies);
+
+            movieList.putInt(SELECTED_KEY, mPosition);
+            onSaveInstanceState(movieList);
+
+        } else {
+            fetchMoviesTask moviesTask = new fetchMoviesTask();
+            String sortBy = getString(R.string.pref_search_category_popularity);
+
+            moviesTask.execute(sortBy);
+            buildPosters();
+            Toast.makeText(getContext(), getString(R.string.no_favourites_error), Toast.LENGTH_LONG).show();
+
+        }
     }
+
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
+        if (mPosition != GridView.INVALID_POSITION) {
+            outState.putInt(SELECTED_KEY, mPosition);
+        }
+        outState.putParcelableArrayList("mMovies", mMovies);
+        outState.putInt(SELECTED_KEY, mPosition);
+        super.onSaveInstanceState(outState);
+    }
+
 
 
 }

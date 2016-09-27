@@ -26,12 +26,10 @@ public class MainActivity extends AppCompatActivity implements PosterListFragmen
                 getSupportFragmentManager().beginTransaction()
                         .replace(R.id.movie_detail_container, new DetailFragment())
                         .commit();
-            } else {
-                mTwoPane = false;
             }
-
-//            PosterListFragment posterListFragment = ((PosterListFragment)getSupportFragmentManager()
-//                .findFragmentById(R.id.container_main));
+        }
+        else {
+            mTwoPane = false;
         }
 
     }
@@ -54,8 +52,6 @@ public class MainActivity extends AppCompatActivity implements PosterListFragmen
         int id = menuItem.getItemId();
         if(id == R.id.action_settings)
         {
-            //TODO: What receives this intent?
-            //TODO: Read over notes on settings
             Intent settingsIntent = new Intent(this, SettingsActivity.class);
             this.startActivity(settingsIntent);
             return true;
@@ -89,5 +85,15 @@ public class MainActivity extends AppCompatActivity implements PosterListFragmen
                 .setData(contentUri);
         startActivity(intent);
     }
+    }
+
+    @Override
+    public void onSaveInstanceState(Bundle savedInstanceState) {
+        super.onSaveInstanceState(savedInstanceState);
+    }
+
+    @Override
+    public void onRestoreInstanceState(Bundle savedInstanceState) {
+        super.onRestoreInstanceState(savedInstanceState);
     }
 }

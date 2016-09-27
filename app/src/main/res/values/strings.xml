@@ -1,7 +1,7 @@
 <resources>
     <string name="app_name">Popular Movies</string>
-    <string name="no_network_error" translatable="true">No Network Connection: Try connecting to the internet then hitting refresh, or restarting the app.</string>
-
+    <string name="no_network_error" translatable="true">No Network Connection: Try connecting to the internet then hitting refresh, or if you have favourites saved, selecting those through Settings.</string>
+    <string name="no_favourites_error" translatable="true">You have no favourites! Try addings some then try again!</string>
     <!--settings strings-->
     <string name="action_settings" translatable="true">Settings</string>
     <string name="action_refresh" translatable="true">Refresh</string>

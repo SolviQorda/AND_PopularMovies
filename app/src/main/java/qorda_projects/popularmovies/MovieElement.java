@@ -16,9 +16,7 @@ public class MovieElement implements Parcelable {
     MovieReview[] movie_reviews;
     MovieTrailer[] movie_trailers;
     int favourite_status;
-    //TODO: add reviews and videos - do these need to go as String[]?
 
-    //T Siciliani says - no arg constructor
     public MovieElement() {}
 
     public String getTitle() {return movie_title;}
