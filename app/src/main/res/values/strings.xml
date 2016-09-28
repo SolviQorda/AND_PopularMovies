@@ -18,5 +18,8 @@
 
     <string name="trailer_watch" translatable="true">Watch Trailer</string>
     <string name="add_favourites">Add To Favourites</string>
+    <string name="remove_favourites">Remove From Favourites</string>
+    <string name="add_toast">Added to favourites</string>
+    <string name="remove_toast">Removed from favourites</string>
 
 </resources>

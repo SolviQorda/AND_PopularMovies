@@ -152,7 +152,7 @@ public class PosterListFragment extends Fragment{
 
         return super.onOptionsItemSelected(menuItem);
     }
-    private void updateMovies() {
+    public void updateMovies() {
         fetchMoviesTask moviesTask = new fetchMoviesTask();
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getActivity());
         String sortBy = prefs.getString(getString(R.string.pref_search_category_key), (getString(R.string.pref_search_category_popularity)));
@@ -258,8 +258,8 @@ public class PosterListFragment extends Fragment{
             BufferedReader reader = null;
 
             String movieJsonStr = null;
-            //TODO: Insert an API key here
-            String MDBapiKey = "";
+
+            String MDBapiKey = BuildConfig.API_KEY;
 
             try {
                 final String MOVIES_BASE_URL = "http://api.themoviedb.org/3/discover/movie?";

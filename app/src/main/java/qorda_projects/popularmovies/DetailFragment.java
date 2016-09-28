@@ -53,12 +53,6 @@ public class DetailFragment extends Fragment implements LoaderManager.LoaderCall
     public static ArrayList<MovieTrailer> mTrailers;
     public static ArrayList<MovieReview> mReviews;
 
-    public final String REMOVE_FROM_FAVOURITES = "Remove From Favourites";
-    public final String ADD_TO_FAVOURITES = "Add To Favourites";
-
-
-    public final String DETAIL_URI = "URI";
-
     //Writing projection
 
     private static final int DETAIL_LOADER = 0;
@@ -152,7 +146,6 @@ public class DetailFragment extends Fragment implements LoaderManager.LoaderCall
 
     @Override
     public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
-        Log.v(LOG_TAG, "inside onloadfinished");
         if(data != null && data.moveToFirst()) {
             String synopsis = data.getString(COL_MOVIE_OVERVIEW);
             String posterUrl = data.getString(COL_MOVIE_POSTER_PATH);
@@ -165,9 +158,9 @@ public class DetailFragment extends Fragment implements LoaderManager.LoaderCall
             String releaseDate = data.getString(COL_MOVIE_RELEASE).substring(0, 4);
             Log.v(LOG_TAG, "faveStat of" + title + "is" + Integer.toString(favourite));
             if(favourite == 0){
-                favouriteStr = REMOVE_FROM_FAVOURITES;
+                favouriteStr = getResources().getString(R.string.remove_favourites);
             } else {
-                favouriteStr = ADD_TO_FAVOURITES;
+                favouriteStr = getResources().getString(R.string.add_favourites);
             }
 
             mSynopsisView.setText(synopsis);
@@ -180,43 +173,36 @@ public class DetailFragment extends Fragment implements LoaderManager.LoaderCall
             Uri imageUri = Uri.parse(URLroot).buildUpon().build();
 
             mPosterImageView.setImageURI(imageUri);
-            Log.v(LOG_TAG, "thumbnail uri passed: " + imageUri);
             Picasso.with(getContext()).
                     load(imageUri).
                     into(mPosterImageView);
-
-//                if (mShareActionProvider != null) {
-//                    mShareActionProvider.setShareIntent(createShareForecastIntent());
-//                }
 
             mFavouriteButton.setOnClickListener(new Button.OnClickListener(){
 
                 @Override
                 public void onClick(View view) {
 
+
                     ContentValues favouriteValue = new ContentValues();
-                    Log.v(LOG_TAG, "favouriteValue: " + favouriteValue);
                     String mSelectionClause = moviesContract.MoviesEntry.COLUMN_DB_ID + " = ?";
                     String[] selectionArgs = {mdbId};
+
                     if (favourite == 1) {
-//                        favourite = 0;
                         favouriteValue.put(moviesContract.MoviesEntry.COLUMN_FAVOURITE, favourite - 1);
                         getContext().getContentResolver().update(mUri, favouriteValue, mSelectionClause, selectionArgs);
-                        mFavouriteButton.setText(REMOVE_FROM_FAVOURITES);
-                        Toast.makeText(getContext(), "Added to favourites!", Toast.LENGTH_SHORT).show();
-
+                        mFavouriteButton.setText(getResources().getString(R.string.remove_favourites));
+                        Toast.makeText(getContext(), getResources().getString(R.string.add_toast), Toast.LENGTH_SHORT).show();
+                        favourite = 0;
                         favouriteValue.clear();
                     }
                      else if (favourite == 0){
-////                        favourite = 1;
                         favouriteValue.put(moviesContract.MoviesEntry.COLUMN_FAVOURITE, favourite + 1);
                         getContext().getContentResolver().update(mUri, favouriteValue, mSelectionClause, selectionArgs);
-                        mFavouriteButton.setText(ADD_TO_FAVOURITES);
-                        Toast.makeText(getContext(), "Removed from favourites", Toast.LENGTH_SHORT).show();
-
+                        mFavouriteButton.setText(getResources().getString(R.string.add_favourites));
+                        Toast.makeText(getContext(), getResources().getString(R.string.remove_toast), Toast.LENGTH_SHORT).show();
+                        favourite = 1;
+                        favouriteValue.clear();
                     }
-                    Log.v(LOG_TAG, "favouriteValue: " + favouriteValue);
-
                 }
 
             });
@@ -233,7 +219,6 @@ public class DetailFragment extends Fragment implements LoaderManager.LoaderCall
     public class fetchTrailersAndReviews extends AsyncTask<MovieElement, Void, MovieElement> {
 
         final String MDB_RESULTS = "results";
-        final String MDB_ID = "id";
         final String MDB_REVIEW_AUTHOR = "author";
         final String MDB_REVIEW_CONTENT = "content";
         final String MDB_TRAILER_KEY = "key";
@@ -276,7 +261,6 @@ public class DetailFragment extends Fragment implements LoaderManager.LoaderCall
             for(int i = 0;i < trailerResultsArray.length();i++) {
                 JSONObject trailerJson = trailerResultsArray.getJSONObject(i);
                 MovieTrailer trailer = new MovieTrailer();
-                //TODO: clean this code if it works
                 String key = trailerJson.getString(MDB_TRAILER_KEY);
                 String name = trailerJson.getString(MDB_TRAILER_NAME);
 
@@ -309,8 +293,7 @@ public class DetailFragment extends Fragment implements LoaderManager.LoaderCall
             final String MDB_REVIEWS = "reviews";
             final String MDB_API_PARAM = "api_key";
 
-            //TODO: Insert an API key here
-            String MDBapiKey = "";
+            String MDBapiKey = BuildConfig.API_KEY;
 
             //we only need the id
                 Log.v(LOG_TAG, "movie id: " + mdbId);
