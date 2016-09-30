@@ -30,14 +30,14 @@ import java.util.ArrayList;
 import qorda_projects.popularmovies.data.moviesContract;
 
 
-public class PosterListFragment extends Fragment implements LoaderManager.LoaderCallbacks<MovieElement>{
+public class PosterListFragment extends Fragment implements LoaderManager.LoaderCallbacks<MovieElement> {
 
     private static final String LOG_TAG = PosterListFragment.class.getSimpleName();
 
     public static ImageAdapter mMoviesAdapter;
     private int mPosition = GridView.INVALID_POSITION;
     public fetchMoviesTask.Status asyncStatus;
-    public long waitTime = 50L;
+    public String mSortBy;
 
     private SharedPreferences.OnSharedPreferenceChangeListener prefListener;
     public GridView posterGridView;
@@ -113,19 +113,8 @@ public class PosterListFragment extends Fragment implements LoaderManager.Loader
             if (savedInstanceState == null && isOnline()) {
 
                 updateMovies();
-                String sortBy = prefs.getString(getString(R.string.pref_search_category_key), (getString(R.string.pref_search_category_default)));
-
-                if (!sortBy.equals("favourites")) {
-
-                    mMovies = fetchMoviesTask.mMovies;
-
-                }
-
-
-                    mMoviesAdapter = new ImageAdapter(getContext(), mMovies);
-
-                    posterGridView.setAdapter(mMoviesAdapter);
-                    pushToDatabase(mMovies);
+                mSortBy = prefs.getString(getString(R.string.pref_search_category_key), (getString(R.string.pref_search_category_default)));
+                pushToDatabase(mMovies);
 
                 } else {
                     Toast.makeText(getContext(), getString(R.string.no_network_error), Toast.LENGTH_LONG).show();
@@ -159,12 +148,10 @@ public class PosterListFragment extends Fragment implements LoaderManager.Loader
             Bundle movieList = new Bundle();
 
             movieList.putParcelableArrayList("mMovies", mMovies);
-            Log.v(LOG_TAG, "mmVoies in OPE: " + movieList);
             mMoviesAdapter = new ImageAdapter(getContext(), mMovies);
 
             movieList.putInt(getResources().getString(R.string.selected_key), mPosition);
             onSaveInstanceState(movieList);
-
 
         }
         return rootView;
@@ -178,6 +165,14 @@ public class PosterListFragment extends Fragment implements LoaderManager.Loader
     @Override
     public void onResume(){
         super.onResume();
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getActivity());
+        String resumeSortBy = prefs.getString(getString(R.string.pref_search_category_key), (getString(R.string.pref_search_category_default)));
+        //update movies
+        if (!resumeSortBy.equals(mSortBy)){
+            updateMovies();
+            mMoviesAdapter.notifyDataSetChanged();
+        }
+        //set adapter
 
     }
 
@@ -220,6 +215,10 @@ public class PosterListFragment extends Fragment implements LoaderManager.Loader
             favouritesTask();
         } else {
             moviesTask.execute(sortBy);
+            mMovies = fetchMoviesTask.mMovies;
+            mMoviesAdapter = new ImageAdapter(getContext(), mMovies);
+            posterGridView.setAdapter(mMoviesAdapter);
+
             if(moviesTask.getStatus() == fetchMoviesTask.Status.RUNNING){
                 asyncStatus = fetchMoviesTask.Status.RUNNING;
             } else if (moviesTask.getStatus() == fetchMoviesTask.Status.FINISHED){

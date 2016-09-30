@@ -25,6 +25,10 @@ public class fetchMoviesTask extends AsyncTask<String, Void, MovieElement[]> {
     private static final String LOG_TAG = PosterListFragment.class.getSimpleName();
     public static ArrayList<MovieElement> mMovies;
 
+    public interface AsyncCallback {
+        void updateData(ArrayList<MovieElement> mMovies);
+    }
+
     private MovieElement[] getMovieDataFromJson(String movieJsonStr)
             throws JSONException {
         final String MDB_RESULTS = "results";
