@@ -13,7 +13,6 @@
     </layouts>
   </component>
   <component name="AndroidLogFilters">
-    <option name="TOOL_WINDOW_CUSTOM_FILTER" value="v/" />
     <option name="TOOL_WINDOW_CONFIGURED_FILTER" value="Show only selected application" />
   </component>
   <component name="ChangeListManager">
@@ -209,27 +208,27 @@
       <file leaf-file-name="PosterListFragment.java" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/app/src/main/java/qorda_projects/popularmovies/PosterListFragment.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="-10.311378">
-              <caret line="37" column="36" selection-start-line="37" selection-start-column="36" selection-end-line="37" selection-end-column="36" />
+            <state vertical-scroll-proportion="0.55688626">
+              <caret line="224" column="49" selection-start-line="224" selection-start-column="49" selection-end-line="224" selection-end-column="49" />
               <folding>
                 <element signature="imports" expanded="true" />
-                <element signature="e#3713#3760#0" expanded="true" />
-                <element signature="e#3814#3861#0" expanded="true" />
-                <element signature="e#4282#4326#0" expanded="true" />
-                <element signature="e#4329#4377#0" expanded="true" />
-                <element signature="e#4497#4533#0" expanded="true" />
-                <element signature="e#4636#5574#0" expanded="true" />
-                <element signature="e#5573#5574#0" expanded="true" />
-                <element signature="e#5928#5975#0" expanded="true" />
-                <element signature="e#6338#6382#0" expanded="true" />
-                <element signature="e#6385#6433#0" expanded="true" />
-                <element signature="e#7665#7709#0" expanded="true" />
-                <element signature="e#7712#7760#0" expanded="true" />
-                <element signature="e#9620#9666#0" expanded="true" />
-                <element signature="e#9740#9786#0" expanded="true" />
-                <element signature="e#10352#10399#0" expanded="true" />
-                <element signature="e#10508#10555#0" expanded="true" />
-                <element signature="e#11467#11517#0" expanded="true" />
+                <element signature="e#3905#3952#0" expanded="true" />
+                <element signature="e#4006#4053#0" expanded="true" />
+                <element signature="e#4474#4518#0" expanded="true" />
+                <element signature="e#4521#4569#0" expanded="true" />
+                <element signature="e#4689#4725#0" expanded="true" />
+                <element signature="e#4828#5766#0" expanded="true" />
+                <element signature="e#5765#5766#0" expanded="true" />
+                <element signature="e#6120#6167#0" expanded="true" />
+                <element signature="e#6530#6574#0" expanded="true" />
+                <element signature="e#6577#6625#0" expanded="true" />
+                <element signature="e#7880#7924#0" expanded="true" />
+                <element signature="e#7927#7975#0" expanded="true" />
+                <element signature="e#9885#9931#0" expanded="true" />
+                <element signature="e#10005#10051#0" expanded="true" />
+                <element signature="e#10617#10664#0" expanded="true" />
+                <element signature="e#10773#10820#0" expanded="true" />
+                <element signature="e#11732#11782#0" expanded="true" />
               </folding>
             </state>
           </provider>
@@ -239,9 +238,8 @@
         <entry file="file://$PROJECT_DIR$/app/src/main/java/qorda_projects/popularmovies/ImageAdapter.java">
           <provider selected="true" editor-type-id="text-editor">
             <state vertical-scroll-proportion="0.0">
-              <caret line="19" column="28" selection-start-line="19" selection-start-column="28" selection-end-line="19" selection-end-column="28" />
+              <caret line="29" column="0" selection-start-line="29" selection-start-column="0" selection-end-line="29" selection-end-column="0" />
               <folding>
-                <element signature="e#697#698#0" expanded="true" />
                 <element signature="e#734#735#0" expanded="true" />
               </folding>
             </state>
@@ -252,7 +250,7 @@
         <entry file="file://$PROJECT_DIR$/app/src/main/java/qorda_projects/popularmovies/fetchMoviesTask.java">
           <provider selected="true" editor-type-id="text-editor">
             <state vertical-scroll-proportion="0.0">
-              <caret line="28" column="57" selection-start-line="28" selection-start-column="57" selection-end-line="28" selection-end-column="57" />
+              <caret line="29" column="0" selection-start-line="29" selection-start-column="0" selection-end-line="29" selection-end-column="0" />
               <folding>
                 <element signature="imports" expanded="true" />
               </folding>
@@ -2700,7 +2698,7 @@
       <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.17700455" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Android Model" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="true" content_ui="tabs" />
       <window_info id="Capture Analysis" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
-      <window_info id="Android Monitor" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.46596065" sideWeight="0.493517" order="7" side_tool="false" content_ui="tabs" />
+      <window_info id="Android Monitor" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.526475" sideWeight="0.493517" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Captures" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.24959481" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.41149774" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.5204236" sideWeight="0.50648296" order="7" side_tool="true" content_ui="tabs" />
@@ -2872,222 +2870,228 @@
         </line-breakpoint>
         <line-breakpoint enabled="true" type="java-line">
           <url>file://$PROJECT_DIR$/app/src/main/java/qorda_projects/popularmovies/PosterListFragment.java</url>
-          <line>156</line>
+          <line>162</line>
           <properties />
           <option name="timeStamp" value="155" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="java-line">
           <url>file://$PROJECT_DIR$/app/src/main/java/qorda_projects/popularmovies/PosterListFragment.java</url>
-          <line>114</line>
+          <line>120</line>
           <properties />
           <option name="timeStamp" value="177" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="java-line">
           <url>file://$PROJECT_DIR$/app/src/main/java/qorda_projects/popularmovies/PosterListFragment.java</url>
-          <line>102</line>
+          <line>108</line>
           <properties />
           <option name="timeStamp" value="179" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="java-line">
           <url>file://$PROJECT_DIR$/app/src/main/java/qorda_projects/popularmovies/PosterListFragment.java</url>
-          <line>105</line>
+          <line>111</line>
           <properties />
           <option name="timeStamp" value="180" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="java-line">
           <url>file://$PROJECT_DIR$/app/src/main/java/qorda_projects/popularmovies/PosterListFragment.java</url>
-          <line>109</line>
+          <line>115</line>
           <properties />
           <option name="timeStamp" value="181" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="java-line">
           <url>file://$PROJECT_DIR$/app/src/main/java/qorda_projects/popularmovies/PosterListFragment.java</url>
-          <line>86</line>
+          <line>92</line>
           <properties />
           <option name="timeStamp" value="182" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="java-line">
           <url>file://$PROJECT_DIR$/app/src/main/java/qorda_projects/popularmovies/fetchMoviesTask.java</url>
-          <line>158</line>
+          <line>167</line>
           <properties />
           <option name="timeStamp" value="183" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="java-line">
           <url>file://$PROJECT_DIR$/app/src/main/java/qorda_projects/popularmovies/fetchMoviesTask.java</url>
-          <line>153</line>
+          <line>162</line>
           <properties />
           <option name="timeStamp" value="184" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="java-line">
           <url>file://$PROJECT_DIR$/app/src/main/java/qorda_projects/popularmovies/PosterListFragment.java</url>
-          <line>216</line>
+          <line>222</line>
           <properties />
           <option name="timeStamp" value="185" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="java-line">
           <url>file://$PROJECT_DIR$/app/src/main/java/qorda_projects/popularmovies/PosterListFragment.java</url>
-          <line>213</line>
+          <line>219</line>
           <properties />
           <option name="timeStamp" value="186" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="java-line">
           <url>file://$PROJECT_DIR$/app/src/main/java/qorda_projects/popularmovies/PosterListFragment.java</url>
-          <line>214</line>
+          <line>220</line>
           <properties />
           <option name="timeStamp" value="188" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="java-line">
           <url>file://$PROJECT_DIR$/app/src/main/java/qorda_projects/popularmovies/PosterListFragment.java</url>
-          <line>123</line>
+          <line>129</line>
           <properties />
           <option name="timeStamp" value="191" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="java-line">
           <url>file://$PROJECT_DIR$/app/src/main/java/qorda_projects/popularmovies/PosterListFragment.java</url>
-          <line>127</line>
+          <line>133</line>
           <properties />
           <option name="timeStamp" value="193" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="java-line">
           <url>file://$PROJECT_DIR$/app/src/main/java/qorda_projects/popularmovies/PosterListFragment.java</url>
-          <line>144</line>
+          <line>150</line>
           <properties />
           <option name="timeStamp" value="194" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="java-line">
           <url>file://$PROJECT_DIR$/app/src/main/java/qorda_projects/popularmovies/PosterListFragment.java</url>
-          <line>149</line>
+          <line>155</line>
           <properties />
           <option name="timeStamp" value="195" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="java-line">
           <url>file://$PROJECT_DIR$/app/src/main/java/qorda_projects/popularmovies/PosterListFragment.java</url>
-          <line>305</line>
+          <line>312</line>
           <properties />
           <option name="timeStamp" value="197" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="java-line">
           <url>file://$PROJECT_DIR$/app/src/main/java/qorda_projects/popularmovies/PosterListFragment.java</url>
-          <line>312</line>
+          <line>319</line>
           <properties />
           <option name="timeStamp" value="198" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="java-line">
           <url>file://$PROJECT_DIR$/app/src/main/java/qorda_projects/popularmovies/PosterListFragment.java</url>
-          <line>314</line>
+          <line>321</line>
           <properties />
           <option name="timeStamp" value="199" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="java-line">
           <url>file://$PROJECT_DIR$/app/src/main/java/qorda_projects/popularmovies/PosterListFragment.java</url>
-          <line>318</line>
+          <line>325</line>
           <properties />
           <option name="timeStamp" value="200" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="java-line">
           <url>file://$PROJECT_DIR$/app/src/main/java/qorda_projects/popularmovies/PosterListFragment.java</url>
-          <line>321</line>
+          <line>328</line>
           <properties />
           <option name="timeStamp" value="201" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="java-line">
           <url>file://$PROJECT_DIR$/app/src/main/java/qorda_projects/popularmovies/PosterListFragment.java</url>
-          <line>344</line>
+          <line>351</line>
           <properties />
           <option name="timeStamp" value="203" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="java-line">
           <url>file://$PROJECT_DIR$/app/src/main/java/qorda_projects/popularmovies/PosterListFragment.java</url>
-          <line>323</line>
+          <line>330</line>
           <properties />
           <option name="timeStamp" value="205" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="java-line">
           <url>file://$PROJECT_DIR$/app/src/main/java/qorda_projects/popularmovies/PosterListFragment.java</url>
-          <line>343</line>
+          <line>350</line>
           <properties />
           <option name="timeStamp" value="210" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="java-line">
           <url>file://$PROJECT_DIR$/app/src/main/java/qorda_projects/popularmovies/PosterListFragment.java</url>
-          <line>342</line>
+          <line>349</line>
           <properties />
           <option name="timeStamp" value="211" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="java-line">
           <url>file://$PROJECT_DIR$/app/src/main/java/qorda_projects/popularmovies/PosterListFragment.java</url>
-          <line>346</line>
+          <line>353</line>
           <properties />
           <option name="timeStamp" value="212" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="java-line">
           <url>file://$PROJECT_DIR$/app/src/main/java/qorda_projects/popularmovies/PosterListFragment.java</url>
-          <line>347</line>
+          <line>354</line>
           <properties />
           <option name="timeStamp" value="214" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="java-line">
           <url>file://$PROJECT_DIR$/app/src/main/java/qorda_projects/popularmovies/PosterListFragment.java</url>
-          <line>215</line>
+          <line>221</line>
           <properties />
           <option name="timeStamp" value="221" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="java-line">
           <url>file://$PROJECT_DIR$/app/src/main/java/qorda_projects/popularmovies/PosterListFragment.java</url>
-          <line>166</line>
+          <line>172</line>
           <properties />
           <option name="timeStamp" value="228" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="java-line">
           <url>file://$PROJECT_DIR$/app/src/main/java/qorda_projects/popularmovies/PosterListFragment.java</url>
-          <line>167</line>
+          <line>173</line>
           <properties />
           <option name="timeStamp" value="229" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="java-line">
           <url>file://$PROJECT_DIR$/app/src/main/java/qorda_projects/popularmovies/PosterListFragment.java</url>
-          <line>171</line>
+          <line>177</line>
           <properties />
           <option name="timeStamp" value="230" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="java-line">
           <url>file://$PROJECT_DIR$/app/src/main/java/qorda_projects/popularmovies/PosterListFragment.java</url>
-          <line>170</line>
+          <line>176</line>
           <properties />
           <option name="timeStamp" value="231" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="java-line">
           <url>file://$PROJECT_DIR$/app/src/main/java/qorda_projects/popularmovies/PosterListFragment.java</url>
-          <line>172</line>
+          <line>178</line>
           <properties />
           <option name="timeStamp" value="232" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="java-line">
           <url>file://$PROJECT_DIR$/app/src/main/java/qorda_projects/popularmovies/PosterListFragment.java</url>
-          <line>217</line>
+          <line>223</line>
           <properties />
           <option name="timeStamp" value="233" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="java-line">
           <url>file://$PROJECT_DIR$/app/src/main/java/qorda_projects/popularmovies/PosterListFragment.java</url>
-          <line>218</line>
+          <line>225</line>
           <properties />
           <option name="timeStamp" value="234" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="java-line">
           <url>file://$PROJECT_DIR$/app/src/main/java/qorda_projects/popularmovies/PosterListFragment.java</url>
-          <line>219</line>
+          <line>226</line>
           <properties />
           <option name="timeStamp" value="235" />
         </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/app/src/main/java/qorda_projects/popularmovies/PosterListFragment.java</url>
+          <line>224</line>
+          <properties />
+          <option name="timeStamp" value="236" />
+        </line-breakpoint>
         <line-breakpoint enabled="true" type="java-method">
           <url>file://$PROJECT_DIR$/app/src/main/java/qorda_projects/popularmovies/PosterListFragment.java</url>
-          <line>82</line>
+          <line>88</line>
           <properties class="qorda_projects.popularmovies.PosterListFragment" method="onCreateView" />
           <option name="timeStamp" value="224" />
         </line-breakpoint>
       </breakpoints>
-      <option name="time" value="236" />
+      <option name="time" value="237" />
     </breakpoint-manager>
     <watches-manager />
   </component>
@@ -3097,7 +3101,6 @@
         <state vertical-scroll-proportion="0.0">
           <caret line="41" column="23" selection-start-line="41" selection-start-column="16" selection-end-line="41" selection-end-column="23" />
           <folding>
-            <element signature="e#697#698#0" expanded="true" />
             <element signature="e#734#735#0" expanded="true" />
           </folding>
         </state>
@@ -3488,13 +3491,32 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/app/src/main/java/qorda_projects/popularmovies/DetailFragment.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="134" column="0" selection-start-line="134" selection-start-column="0" selection-end-line="134" selection-end-column="0" />
+          <folding>
+            <element signature="imports" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/app/src/main/java/qorda_projects/popularmovies/ImageAdapter.java">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0">
-          <caret line="19" column="28" selection-start-line="19" selection-start-column="28" selection-end-line="19" selection-end-column="28" />
+          <caret line="29" column="0" selection-start-line="29" selection-start-column="0" selection-end-line="29" selection-end-column="0" />
           <folding>
-            <element signature="e#697#698#0" expanded="true" />
             <element signature="e#734#735#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/src/main/java/qorda_projects/popularmovies/fetchMoviesTask.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="29" column="0" selection-start-line="29" selection-start-column="0" selection-end-line="29" selection-end-column="0" />
+          <folding>
+            <element signature="imports" expanded="true" />
           </folding>
         </state>
       </provider>
@@ -3507,49 +3529,29 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/app/src/main/java/qorda_projects/popularmovies/DetailFragment.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0">
-          <caret line="134" column="0" selection-start-line="134" selection-start-column="0" selection-end-line="134" selection-end-column="0" />
-          <folding>
-            <element signature="imports" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/app/src/main/java/qorda_projects/popularmovies/fetchMoviesTask.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0">
-          <caret line="28" column="57" selection-start-line="28" selection-start-column="57" selection-end-line="28" selection-end-column="57" />
-          <folding>
-            <element signature="imports" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/app/src/main/java/qorda_projects/popularmovies/PosterListFragment.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="-10.311378">
-          <caret line="37" column="36" selection-start-line="37" selection-start-column="36" selection-end-line="37" selection-end-column="36" />
+        <state vertical-scroll-proportion="0.55688626">
+          <caret line="224" column="49" selection-start-line="224" selection-start-column="49" selection-end-line="224" selection-end-column="49" />
           <folding>
             <element signature="imports" expanded="true" />
-            <element signature="e#3713#3760#0" expanded="true" />
-            <element signature="e#3814#3861#0" expanded="true" />
-            <element signature="e#4282#4326#0" expanded="true" />
-            <element signature="e#4329#4377#0" expanded="true" />
-            <element signature="e#4497#4533#0" expanded="true" />
-            <element signature="e#4636#5574#0" expanded="true" />
-            <element signature="e#5573#5574#0" expanded="true" />
-            <element signature="e#5928#5975#0" expanded="true" />
-            <element signature="e#6338#6382#0" expanded="true" />
-            <element signature="e#6385#6433#0" expanded="true" />
-            <element signature="e#7665#7709#0" expanded="true" />
-            <element signature="e#7712#7760#0" expanded="true" />
-            <element signature="e#9620#9666#0" expanded="true" />
-            <element signature="e#9740#9786#0" expanded="true" />
-            <element signature="e#10352#10399#0" expanded="true" />
-            <element signature="e#10508#10555#0" expanded="true" />
-            <element signature="e#11467#11517#0" expanded="true" />
+            <element signature="e#3905#3952#0" expanded="true" />
+            <element signature="e#4006#4053#0" expanded="true" />
+            <element signature="e#4474#4518#0" expanded="true" />
+            <element signature="e#4521#4569#0" expanded="true" />
+            <element signature="e#4689#4725#0" expanded="true" />
+            <element signature="e#4828#5766#0" expanded="true" />
+            <element signature="e#5765#5766#0" expanded="true" />
+            <element signature="e#6120#6167#0" expanded="true" />
+            <element signature="e#6530#6574#0" expanded="true" />
+            <element signature="e#6577#6625#0" expanded="true" />
+            <element signature="e#7880#7924#0" expanded="true" />
+            <element signature="e#7927#7975#0" expanded="true" />
+            <element signature="e#9885#9931#0" expanded="true" />
+            <element signature="e#10005#10051#0" expanded="true" />
+            <element signature="e#10617#10664#0" expanded="true" />
+            <element signature="e#10773#10820#0" expanded="true" />
+            <element signature="e#11732#11782#0" expanded="true" />
           </folding>
         </state>
       </provider>

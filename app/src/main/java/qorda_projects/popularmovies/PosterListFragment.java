@@ -30,7 +30,7 @@ import java.util.ArrayList;
 import qorda_projects.popularmovies.data.moviesContract;
 
 
-public class PosterListFragment extends Fragment implements LoaderManager.LoaderCallbacks<MovieElement> {
+public class PosterListFragment extends Fragment implements LoaderManager.LoaderCallbacks<MovieElement>, fetchMoviesTask.AsyncCallback {
 
     private static final String LOG_TAG = PosterListFragment.class.getSimpleName();
 
@@ -71,6 +71,12 @@ public class PosterListFragment extends Fragment implements LoaderManager.Loader
 
     public interface Callback {
         public void onItemSelected(Uri movieUri);
+    }
+
+    @Override
+    public void updateData(ArrayList<MovieElement> mMovies){
+        this.mMovies = mMovies;
+        mMoviesAdapter.notifyDataSetChanged();
     }
 
     @Override
@@ -206,7 +212,7 @@ public class PosterListFragment extends Fragment implements LoaderManager.Loader
         return super.onOptionsItemSelected(menuItem);
     }
     public void updateMovies() {
-        fetchMoviesTask moviesTask = new fetchMoviesTask();
+        fetchMoviesTask moviesTask = new fetchMoviesTask(this.getContext(), this);
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getActivity());
         String sortBy = prefs.getString(getString(R.string.pref_search_category_key), (getString(R.string.pref_search_category_default)));
 
@@ -216,6 +222,7 @@ public class PosterListFragment extends Fragment implements LoaderManager.Loader
         } else {
             moviesTask.execute(sortBy);
             mMovies = fetchMoviesTask.mMovies;
+            Log.v(LOG_TAG, "mmovies:" + mMovies);
             mMoviesAdapter = new ImageAdapter(getContext(), mMovies);
             posterGridView.setAdapter(mMoviesAdapter);
 

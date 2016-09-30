@@ -1,5 +1,6 @@
 package qorda_projects.popularmovies;
 
+import android.content.Context;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.util.Log;
@@ -24,6 +25,13 @@ public class fetchMoviesTask extends AsyncTask<String, Void, MovieElement[]> {
 
     private static final String LOG_TAG = PosterListFragment.class.getSimpleName();
     public static ArrayList<MovieElement> mMovies;
+    public Context mContext;
+    public AsyncCallback mAsyncCallback;
+
+    public fetchMoviesTask(Context context,AsyncCallback asyncCallback){
+        mContext = context;
+        mAsyncCallback = asyncCallback;
+    }
 
     public interface AsyncCallback {
         void updateData(ArrayList<MovieElement> mMovies);
@@ -148,6 +156,7 @@ public class fetchMoviesTask extends AsyncTask<String, Void, MovieElement[]> {
     @Override
     protected void onPostExecute(MovieElement[] result) {
         super.onPostExecute(result);
+        mAsyncCallback.updateData(mMovies);
         if(PosterListFragment.mMoviesAdapter!=null) {
             PosterListFragment.mMoviesAdapter.notifyDataSetChanged();
         }
