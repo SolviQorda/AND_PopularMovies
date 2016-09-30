@@ -25,7 +25,8 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@+id/detail_title"
-        android:padding="@dimen/padding_constant"/>
+        android:padding="@dimen/padding_constant"
+        />
 
     <LinearLayout
         android:id="@+id/release_and_rating"

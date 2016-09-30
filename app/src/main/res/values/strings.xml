@@ -1,15 +1,22 @@
 <resources>
     <string name="app_name">Popular Movies</string>
     <string name="no_network_error" translatable="true">No Network Connection: Try connecting to the internet then hitting refresh, or if you have favourites saved, selecting those through Settings.</string>
+    <string name="splash_text" translatable="true">Choose a film to see more details!</string>
     <string name="no_favourites_error" translatable="true">You have no favourites! Try addings some then try again!</string>
+
+    <string name="selected_key" translatable="true">selected_position</string>
+    <string name="placeholder" translatable="true">PLACEHOLDER: TO REPLACE WITH DATA</string>
+    <string name="favourite_query" translatable="false">0</string>
+
     <!--settings strings-->
     <string name="action_settings" translatable="true">Settings</string>
     <string name="action_refresh" translatable="true">Refresh</string>
     <string name="content_authority" translatable="false">qorda_projects.projects.popularmovies</string>
 
-    <string name="pref_search_category_key" translatable="false">searchCategory</string>
-    <string name="pref_search_category_popularity" translatable="true">popularity</string>
-    <string name="pref_search_category_popularity_label" translatable="true">Popularity</string>
+    <string name="pref_search_category_key" translatable="false">sort</string>
+    <string name="pref_search_category_default" translatable="false">popular</string>
+    <string name="pref_search_category_popularity" translatable="true">popular</string>
+    <string name="pref_search_category_popularity_label" translatable="true">Popular</string>
     <string name="pref_search_category_top_rated" translatable="true">top_rated</string>
     <string name="pref_search_category_top_rated_label" translatable="true">Top Rated</string>
     <string name="pref_search_category_favourites" translatable="true">favourites</string>
