@@ -27,7 +27,11 @@ public class ImageAdapter extends BaseAdapter {
 
 
     public int getCount() {
-        return mMovies.size();
+        if(mMovies==null){
+            return 0;
+        } else {
+            return mMovies.size();
+        }
     }
 
     public void determineMoviePaths(ArrayList<MovieElement> paths) {
@@ -72,12 +76,6 @@ public class ImageAdapter extends BaseAdapter {
                 Picasso.with(mContext).
                         load(URLroot + imageUrl).
                         into(imageView);
-//        Log.v(LOG_TAG, "homepage Image Url that works:" + URLroot + imageUrl);
-
-                String title = (movie.getTitle());
-                String userRating = movie.getUserRating();
-                String releaseDate = movie.getReleaseDate();
-                String synopsis = movie.getSynopsis();
 
         return imageView;
     }

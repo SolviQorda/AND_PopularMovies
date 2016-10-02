@@ -111,6 +111,10 @@ public class DetailFragment extends Fragment implements LoaderManager.LoaderCall
         mReleaseView = (TextView) rootView.findViewById(R.id.detail_releaseDate);
         mFavouriteButton = (Button) rootView.findViewById(R.id.detail_favourites);
 
+        //SPLASH
+        mFavouriteButton.setBackgroundColor(getResources().getColor(R.color.colorTitle));
+        mReleaseView.setText(getResources().getText(R.string.splash_instructions));
+
 
                 MovieElement movie = new MovieElement();
 
@@ -147,6 +151,7 @@ public class DetailFragment extends Fragment implements LoaderManager.LoaderCall
     @Override
     public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
         if(data != null && data.moveToFirst()) {
+            mFavouriteButton.setBackgroundColor(getResources().getColor(R.color.colorAccent));
             String synopsis = data.getString(COL_MOVIE_OVERVIEW);
             String posterUrl = data.getString(COL_MOVIE_POSTER_PATH);
             int movieDbId = data.getInt(COL_MOVIE_DB_ID);

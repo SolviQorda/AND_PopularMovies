@@ -3,7 +3,6 @@ package qorda_projects.popularmovies;
 import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -18,7 +17,6 @@ import java.util.ArrayList;
  */
 public class TrailerAdapter extends ArrayAdapter<MovieTrailer> {
 
-    final String LOG_TAG = TrailerAdapter.class.getSimpleName();
     final String YOUTUBE_BASE = "https://www.youtube.com/watch?v=";
 
 
@@ -57,7 +55,6 @@ public class TrailerAdapter extends ArrayAdapter<MovieTrailer> {
                         public void onClick(View v) {
                             {
                                 String url = YOUTUBE_BASE + key;
-                                Log.v(LOG_TAG, "YT url:" + url);
                                 Intent watchIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(url));
                                 getContext().startActivity(watchIntent);
                             }

@@ -120,14 +120,13 @@ public class PosterListFragment extends Fragment implements LoaderManager.Loader
 
                 updateMovies();
                 mSortBy = prefs.getString(getString(R.string.pref_search_category_key), (getString(R.string.pref_search_category_default)));
-                pushToDatabase(mMovies);
 
-                } else {
-                    Toast.makeText(getContext(), getString(R.string.no_network_error), Toast.LENGTH_LONG).show();
-                }
+            } else {
+                Toast.makeText(getContext(), getString(R.string.no_network_error), Toast.LENGTH_LONG).show();
+            }
+        }
 
-
-                posterGridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            posterGridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                 @Override
                 public void onItemClick(AdapterView<?> adapterView, View view, int position, long l) {
                     //trying to get movie_element object through the adapter.
@@ -158,8 +157,12 @@ public class PosterListFragment extends Fragment implements LoaderManager.Loader
 
             movieList.putInt(getResources().getString(R.string.selected_key), mPosition);
             onSaveInstanceState(movieList);
+            if (mMovies != null) {
+                pushToDatabase(mMovies);
 
-        }
+
+            }
+
         return rootView;
 
     }
@@ -171,7 +174,7 @@ public class PosterListFragment extends Fragment implements LoaderManager.Loader
     @Override
     public void onResume(){
         super.onResume();
-        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getActivity());
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getContext());
         String resumeSortBy = prefs.getString(getString(R.string.pref_search_category_key), (getString(R.string.pref_search_category_default)));
         //update movies
         if (!resumeSortBy.equals(mSortBy)){
@@ -213,52 +216,53 @@ public class PosterListFragment extends Fragment implements LoaderManager.Loader
     }
     public void updateMovies() {
         fetchMoviesTask moviesTask = new fetchMoviesTask(this.getContext(), this);
-        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getActivity());
-        String sortBy = prefs.getString(getString(R.string.pref_search_category_key), (getString(R.string.pref_search_category_default)));
+        if(getContext()!=null) {
+            SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getContext());
+            String sortBy = prefs.getString(getString(R.string.pref_search_category_key), (getString(R.string.pref_search_category_default)));
+            Log.v(LOG_TAG, "SortBy: "+ sortBy);
+            if(sortBy.equals("favourites")){
+                favouritesTask();
+            } else {
+                moviesTask.execute(sortBy);
+                mMovies = fetchMoviesTask.mMovies;
+                Log.v(LOG_TAG, "mmovies:" + mMovies);
 
-        Log.v(LOG_TAG, "SortBy: "+ sortBy);
-        if(sortBy.equals("favourites")){
-            favouritesTask();
-        } else {
-            moviesTask.execute(sortBy);
-            mMovies = fetchMoviesTask.mMovies;
-            Log.v(LOG_TAG, "mmovies:" + mMovies);
+            }
             mMoviesAdapter = new ImageAdapter(getContext(), mMovies);
             posterGridView.setAdapter(mMoviesAdapter);
 
-            if(moviesTask.getStatus() == fetchMoviesTask.Status.RUNNING){
-                asyncStatus = fetchMoviesTask.Status.RUNNING;
-            } else if (moviesTask.getStatus() == fetchMoviesTask.Status.FINISHED){
-                asyncStatus = fetchMoviesTask.Status.FINISHED;
-            }
-
         }
-     }
+
+
+    }
+
 
     public void pushToDatabase(ArrayList<MovieElement> mMovies) {
 
-        for (int i = 0; i < mMovies.size(); i++) {
-            String posterPath = mMovies.get(i).getPosterUrl();
-            String synopsis = mMovies.get(i).getSynopsis();
-            String title = mMovies.get(i).getTitle();
-            String userRating = mMovies.get(i).getUserRating();
-            String releaseDate = mMovies.get(i).getReleaseDate();
-            String mdbId = mMovies.get(i).getMovieId();
+        if(mMovies!=null) {
+            for (int i = 0; i < mMovies.size(); i++) {
+                String posterPath = mMovies.get(i).getPosterUrl();
+                String synopsis = mMovies.get(i).getSynopsis();
+                String title = mMovies.get(i).getTitle();
+                String userRating = mMovies.get(i).getUserRating();
+                String releaseDate = mMovies.get(i).getReleaseDate();
+                String mdbId = mMovies.get(i).getMovieId();
 
-            ContentValues movieValues = new ContentValues();
+                ContentValues movieValues = new ContentValues();
 
-            movieValues.put(moviesContract.MoviesEntry.COLUMN_POSTER_PATH, posterPath);
-            movieValues.put(moviesContract.MoviesEntry.COLUMN_OVERVIEW, synopsis);
-            movieValues.put(moviesContract.MoviesEntry.COLUMN_TITLE, title);
-            movieValues.put(moviesContract.MoviesEntry.COLUMN_VOTE_AVERAGE, userRating);
-            movieValues.put(moviesContract.MoviesEntry.COLUMN_RELEASE_DATE, releaseDate);
-            movieValues.put(moviesContract.MoviesEntry.COLUMN_DB_ID, mdbId);
-            movieValues.put(moviesContract.MoviesEntry.COLUMN_FAVOURITE, 1);
-            movieValues.put(moviesContract.MoviesEntry.COLUMN_VIDEOS, getResources().getString(R.string.placeholder));
-            movieValues.put(moviesContract.MoviesEntry.COLUMN_REVIEWS, getResources().getString(R.string.placeholder));
+                movieValues.put(moviesContract.MoviesEntry.COLUMN_POSTER_PATH, posterPath);
+                movieValues.put(moviesContract.MoviesEntry.COLUMN_OVERVIEW, synopsis);
+                movieValues.put(moviesContract.MoviesEntry.COLUMN_TITLE, title);
+                movieValues.put(moviesContract.MoviesEntry.COLUMN_VOTE_AVERAGE, userRating);
+                movieValues.put(moviesContract.MoviesEntry.COLUMN_RELEASE_DATE, releaseDate);
+                movieValues.put(moviesContract.MoviesEntry.COLUMN_DB_ID, mdbId);
+                movieValues.put(moviesContract.MoviesEntry.COLUMN_FAVOURITE, 1);
+                movieValues.put(moviesContract.MoviesEntry.COLUMN_VIDEOS, getResources().getString(R.string.placeholder));
+                movieValues.put(moviesContract.MoviesEntry.COLUMN_REVIEWS, getResources().getString(R.string.placeholder));
 
 
-            getContext().getContentResolver().insert(moviesContract.MoviesEntry.CONTENT_URI, movieValues);
+                getContext().getContentResolver().insert(moviesContract.MoviesEntry.CONTENT_URI, movieValues);
+            }
         }
     }
 
@@ -346,18 +350,21 @@ public class PosterListFragment extends Fragment implements LoaderManager.Loader
                 favouriteMovie.setFavouriteStatus(favouriteStatus);
                 favouriteMovie.setMovieId(db_id);
                 mMovies.add(favouriteMovie);
-                    if(mMovies!=null){
-                        for(int q=favouritesCursor.getPosition()+1;q<mMovies.size();q++) {
-                            String existingMovieId = favouriteMovie.getMovieId();
-                            if (db_id.equals(existingMovieId)) {
-                                mMovies.remove(q);
-                                break;
-                            }
+                if(mMovies.size()>1) {
+                    for (int q = 0; q < mMovies.size()-1; q++) {
+                        String existingMovieId = mMovies.get(q).getMovieId();
+                        if (db_id.equals(existingMovieId)) {
+                            mMovies.remove(favouriteMovie);
+                            break;
+                        } else {
                         }
+
+                    }
+                }
                         favouritesCursor.moveToNext();
 
 
-                    }
+
             }
         }
         if(PosterListFragment.mMoviesAdapter!=null) {

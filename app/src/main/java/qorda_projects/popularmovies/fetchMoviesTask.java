@@ -160,14 +160,6 @@ public class fetchMoviesTask extends AsyncTask<String, Void, MovieElement[]> {
         if(PosterListFragment.mMoviesAdapter!=null) {
             PosterListFragment.mMoviesAdapter.notifyDataSetChanged();
         }
-////        mMovies = new ArrayList<MovieElement>();
-////        if (result != null) {
-////            mMovies.clear();
-////            //loop to pass result into an arrayList of MovieElements
-////            for (int i = 0; i < result.length; i++) {
-////                mMovies.add(result[i]);
-////            }
-////        }
     }
 
 }
